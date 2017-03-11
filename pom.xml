@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-   <name>Pattern Acceptance</name>
+   <name>Cycle</name>
    <modelVersion>4.0.0</modelVersion>
 
    <groupId>fm.pattern</groupId>
-   <artifactId>pattern-acceptance</artifactId>
+   <artifactId>cycle</artifactId>
    <version>1.0.35-SNAPSHOT</version>
    <packaging>jar</packaging>
 
@@ -16,8 +16,7 @@
    </properties>
 
    <scm>
-      <developerConnection>scm:git:https://github.com/BrandonJohnGrenier/pattern-acceptance.git</developerConnection>
-      <tag>pattern-acceptance-1.0.33</tag>
+      <developerConnection>scm:git:https://github.com/BrandonJohnGrenier/pattern-cycle.git</developerConnection>
    </scm>
 
    <licenses>
@@ -45,8 +44,8 @@
          <groupId>com.mashape.unirest</groupId>
          <artifactId>unirest-java</artifactId>
          <version>1.4.9</version>
-      </dependency>      
-      
+      </dependency>
+
       <dependency>
          <groupId>org.apache.commons</groupId>
          <artifactId>commons-lang3</artifactId>
@@ -57,8 +56,8 @@
          <groupId>junit</groupId>
          <artifactId>junit</artifactId>
          <version>4.12</version>
-      </dependency>      
-      
+      </dependency>
+
       <dependency>
          <groupId>org.mockito</groupId>
          <artifactId>mockito-all</artifactId>
@@ -127,12 +126,12 @@
             <artifactId>aws-maven</artifactId>
             <version>5.0.0.RELEASE</version>
          </extension>
-         
+
          <extension>
             <groupId>org.kuali.maven.wagons</groupId>
             <artifactId>maven-s3-wagon</artifactId>
             <version>1.2.1</version>
-         </extension>         
+         </extension>
       </extensions>
 
       <plugins>
