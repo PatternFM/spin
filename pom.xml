@@ -4,7 +4,7 @@
 
    <groupId>fm.pattern</groupId>
    <artifactId>pattern-acceptance</artifactId>
-   <version>1.0.33-SNAPSHOT</version>
+   <version>1.0.33</version>
    <packaging>jar</packaging>
 
    <properties>
