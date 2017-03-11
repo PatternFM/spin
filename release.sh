@@ -15,5 +15,5 @@
 # limitations under the License.
 #
 
-mvn release:clean release:prepare -B -Dusername=$GIT_REPO_USERNAME -Dpassword=$GIT_REPO_PASSWORD -DautoVersionSubmodules=true -DskipTests=true -DscmCommentPrefix="[skip ci] "
-mvn release:perform -B -Dusername=$GIT_REPO_USERNAME -Dpassword=$GIT_REPO_PASSWORD
+mvn release:clean release:prepare -B -Dusername=$GIT_REPO_USERNAME -Dpassword=$GIT_REPO_PASSWORD -DautoVersionSubmodules=true -DscmCommentPrefix="[skip ci] " -Darguments="-DskipTests"
+mvn release:perform -B -Dusername=$GIT_REPO_USERNAME -Dpassword=$GIT_REPO_PASSWORD -Darguments="-DskipTests"
