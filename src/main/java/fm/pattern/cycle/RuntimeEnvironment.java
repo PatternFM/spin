@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package fm.pattern.acceptance;
+package fm.pattern.cycle;
 
-import fm.pattern.acceptance.config.ConfigurationRepository;
+import fm.pattern.cycle.config.CycleConfiguration;
 
 public class RuntimeEnvironment {
 
@@ -25,24 +25,24 @@ public class RuntimeEnvironment {
 	}
 
 	public static void start() {
-		ConfigurationRepository.instances().forEach(instance -> instance.start());
+		CycleConfiguration.instances().forEach(instance -> instance.start());
 
 		Integer count = 0;
 		while (!running()) {
-			if (count > ConfigurationRepository.getStartupConfiguration().getRetryCount()) {
+			if (count > CycleConfiguration.getStartupConfiguration().getRetryCount()) {
 				throw new IllegalStateException("Timeout occurred while waiting for the runtime environment to boot.");
 			}
-			pause(ConfigurationRepository.getStartupConfiguration().getPollingInterval());
+			pause(CycleConfiguration.getStartupConfiguration().getPollingInterval());
 			count++;
 		}
 	}
 
 	public static void stop() {
-		ConfigurationRepository.instances().forEach(instance -> instance.stop());
+		CycleConfiguration.instances().forEach(instance -> instance.stop());
 	}
 
 	public static boolean running() {
-		return ConfigurationRepository.instances().stream().filter(instance -> !instance.running()).count() == 0;
+		return CycleConfiguration.instances().stream().filter(instance -> !instance.running()).count() == 0;
 	}
 
 	public static void pause(Integer milliseconds) {

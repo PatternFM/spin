@@ -1,4 +1,4 @@
-package fm.pattern.acceptance;
+package fm.pattern.cycle;
 
 import java.io.BufferedReader;
 import java.io.File;

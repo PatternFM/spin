@@ -1,9 +1,9 @@
-package fm.pattern.acceptance.junit;
+package fm.pattern.cycle.junit;
 
 import org.junit.runner.Result;
 import org.junit.runner.notification.RunListener;
 
-import fm.pattern.acceptance.AutomatedAcceptanceTest;
+import fm.pattern.cycle.AutomatedAcceptanceTest;
 
 public class AfterTestRunListener extends RunListener {
 

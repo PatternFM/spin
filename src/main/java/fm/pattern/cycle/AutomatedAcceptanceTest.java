@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package fm.pattern.acceptance;
+package fm.pattern.cycle;
 
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
-import fm.pattern.acceptance.junit.AcceptanceTestRunner;
+import fm.pattern.cycle.junit.AcceptanceTestRunner;
 
 @RunWith(AcceptanceTestRunner.class)
 public abstract class AutomatedAcceptanceTest {

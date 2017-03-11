@@ -1,7 +1,9 @@
-package fm.pattern.acceptance;
+package fm.pattern.cycle;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
+
+import fm.pattern.cycle.Instance;
 
 public class InstanceTest {
 

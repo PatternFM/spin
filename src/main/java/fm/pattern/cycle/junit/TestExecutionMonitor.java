@@ -1,4 +1,4 @@
-package fm.pattern.acceptance.junit;
+package fm.pattern.cycle.junit;
 
 public class TestExecutionMonitor {
 

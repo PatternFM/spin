@@ -1,4 +1,4 @@
-package fm.pattern.acceptance.junit;
+package fm.pattern.cycle.junit;
 
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
