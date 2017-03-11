@@ -15,12 +15,5 @@
 # limitations under the License.
 #
 
-MVN_SETTINGS=settings.xml
-
-git checkout -qf master
-
-git config --global user.email "brandon.john.grenier@gmail.com"
-git config --global user.name "Brandon Grenier"
-
-mvn release:clean release:prepare --settings ${MVN_SETTINGS} -B -Dusername=$GIT_REPO_USERNAME -Dpassword=$GIT_REPO_PASSWORD -DautoVersionSubmodules=true -DskipTests=true -DscmCommentPrefix="[skip ci] " -Darguments="--settings ${MVN_SETTINGS}"
-mvn release:perform --settings ${MVN_SETTINGS} -B -Dusername=$GIT_REPO_USERNAME -Dpassword=$GIT_REPO_PASSWORD -Darguments="--settings ${MVN_SETTINGS}"
+mvn release:clean release:prepare -B -Dusername=$GIT_REPO_USERNAME -Dpassword=$GIT_REPO_PASSWORD -DautoVersionSubmodules=true -DskipTests=true -DscmCommentPrefix="[skip ci] "
+mvn release:perform -B -Dusername=$GIT_REPO_USERNAME -Dpassword=$GIT_REPO_PASSWORD
