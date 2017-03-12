@@ -75,11 +75,11 @@ public final class InstanceManagementService {
             process.destroy();
 
             if (exitValue != 0 && exitValue != 7) {
-                throw new IllegalStateException("The script finished with exit code: " + exitValue);
+                throw new InstanceManagementException("The script finished with exit code: " + exitValue);
             }
         }
         catch (Exception e) {
-            throw new IllegalStateException("Failed to execute script: ", e);
+            throw new InstanceManagementException("Failed to execute script: ", e);
         }
     }
 
