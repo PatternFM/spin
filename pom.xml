@@ -16,7 +16,7 @@
    </properties>
 
    <scm>
-      <developerConnection>scm:git:https://github.com/BrandonJohnGrenier/pattern-cycle.git</developerConnection>
+      <developerConnection>scm:git:https://github.com/BrandonJohnGrenier/cycle.git</developerConnection>
    </scm>
 
    <licenses>
