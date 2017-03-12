@@ -1,6 +1,6 @@
 package fm.pattern.cycle.junit;
 
-public class TestExecutionMonitor {
+public final class TestExecutionMonitor {
 
 	private static Integer testClassesToRun = 0;
 	private static Integer testClassesExecuted = 0;
@@ -9,6 +9,11 @@ public class TestExecutionMonitor {
 
 	}
 
+	static void reset() {
+	    testClassesToRun = 0;
+	    testClassesExecuted = 0;
+	}
+	
 	public static void testStarted() {
 		testClassesToRun += 1;
 	}

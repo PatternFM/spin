@@ -5,6 +5,7 @@ import static org.assertj.core.api.StrictAssertions.assertThat;
 
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import fm.pattern.cycle.Instance;
@@ -12,6 +13,11 @@ import fm.pattern.cycle.PatternAssertions;
 import fm.pattern.cycle.Timeout;
 
 public class CycleConfigurationTest {
+
+    @Before
+    public void before() {
+        CycleConfiguration.reset();
+    }
 
     @Test
     public void shouldBeAbleToLoadInstancesFromTheDefaultCycleConfigurationFile() {
@@ -55,7 +61,7 @@ public class CycleConfigurationTest {
 
     @Test
     public void shouldBeAbleToLoadInstancesFromTheCycleConfigSystemProperty() {
-        System.setProperty("cycle.config", "cycle-ci.yml");
+        CycleConfiguration.load("cycle-ci.yml");
 
         List<Instance> instances = CycleConfiguration.getInstances();
         assertThat(instances).hasSize(2);

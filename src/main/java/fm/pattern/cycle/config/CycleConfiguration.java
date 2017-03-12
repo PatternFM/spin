@@ -55,11 +55,14 @@ public final class CycleConfiguration {
         }
     }
 
-    public static void load(String filename) {
+    static void reset() {
+        System.clearProperty("cycle.config");
         if (model != null) {
             model.clear();
         }
-
+    }
+    
+    public static void load(String filename) {
         InputStream inputStream = CycleConfiguration.class.getClassLoader().getResourceAsStream(filename);
         if (inputStream == null) {
             log.warn("Unable to find " + filename + " on the classpath.");
