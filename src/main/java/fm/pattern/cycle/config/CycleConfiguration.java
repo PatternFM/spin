@@ -32,8 +32,11 @@ import fm.pattern.cycle.Timeout;
 @SuppressWarnings("unchecked")
 public class CycleConfiguration {
 
+    public static final Integer DEFAULT_RETRY_COUNT = 60;
+    public static final Integer DEFAULT_POLLING_INTERVAL_MILLIS = 1000;
+
     private static final Logger log = LoggerFactory.getLogger(CycleConfiguration.class);
-    private static final String DEFAULT_CONFIG_FILENAME = "cycle.yml";
+    private static final String default_filename = "cycle.yml";
 
     private static Map<String, Map<String, Object>> model;
 
@@ -44,7 +47,7 @@ public class CycleConfiguration {
             load(configFilename);
         }
         else {
-            load(DEFAULT_CONFIG_FILENAME);
+            load(default_filename);
         }
     }
 
@@ -69,17 +72,17 @@ public class CycleConfiguration {
 
             if (key.equals("startup")) {
                 Map<String, Object> map = entry.getValue();
-                Integer pollingInterval = map.containsKey("polling_interval") ? (Integer) map.get("polling_interval") : null;
-                Integer retryCount = map.containsKey("retry_count") ? (Integer) map.get("retry_count") : null;
+                Integer pollingInterval = map.containsKey("polling_interval") ? (Integer) map.get("polling_interval") : DEFAULT_POLLING_INTERVAL_MILLIS;
+                Integer retryCount = map.containsKey("retry_count") ? (Integer) map.get("retry_count") : DEFAULT_RETRY_COUNT;
                 return new Timeout(pollingInterval, retryCount);
             }
 
         }
 
-        return null;
+        return new Timeout(DEFAULT_POLLING_INTERVAL_MILLIS, DEFAULT_RETRY_COUNT);
     }
 
-    public static List<Instance> instances() {
+    public static List<Instance> getInstances() {
         List<Instance> instances = new ArrayList<>();
 
         for (Map.Entry<String, Map<String, Object>> entry : model.entrySet()) {

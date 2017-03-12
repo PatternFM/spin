@@ -20,8 +20,8 @@ import fm.pattern.commons.util.JSON;
 
 public class Timeout {
 
-    private Integer pollingInterval = 1000;
-    private Integer retryCount = 60;
+    private Integer pollingInterval;
+    private Integer retryCount;
 
     public Timeout() {
 

@@ -25,7 +25,7 @@ public final class RuntimeEnvironment {
     }
 
     public static void start() {
-        CycleConfiguration.instances().forEach(instance -> instance.start());
+        CycleConfiguration.getInstances().forEach(instance -> instance.start());
 
         Integer count = 0;
 
@@ -39,11 +39,11 @@ public final class RuntimeEnvironment {
     }
 
     public static void stop() {
-        CycleConfiguration.instances().forEach(instance -> instance.stop());
+        CycleConfiguration.getInstances().forEach(instance -> instance.stop());
     }
 
     public static boolean running() {
-        return CycleConfiguration.instances().stream().filter(instance -> !instance.running()).count() == 0;
+        return CycleConfiguration.getInstances().stream().filter(instance -> !instance.running()).count() == 0;
     }
 
     private static void pause(Integer milliseconds) {

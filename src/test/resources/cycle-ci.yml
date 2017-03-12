@@ -1,0 +1,13 @@
+startup:
+  polling_interval: 5000
+  retry_count: 10
+ 
+Test Service 1: 
+  path: test-path-1/extended
+  ping: http://api.ms1.com/v1/ping
+  
+Test Service 2: 
+  path: test-path-2/extended
+  ping: http://api.ms2.com/v1/ping  
+  start: start-service.bat
+  stop: stop-service.bat

@@ -1,9 +1,9 @@
-service: authentication-service
-  ping: "http://localhost:9600/ping"
-  start: start.sh
-  stop: stop.sh
+Test Service 1: 
+  path: test-path-1
+  ping: http://localhost:8080/v1/ping
   
-service: authentication-harness
-  ping: "http://localhost:9601/ping"
-  start: start.sh
-  stop: stop.sh  
+Test Service 2: 
+  path: test-path-2
+  ping: http://localhost:9090/v1/ping  
+  start: start-service.bat
+  stop: stop-service.bat
