@@ -3,6 +3,8 @@ package fm.pattern.cycle;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -21,23 +23,23 @@ public final class InstanceManagementService {
     }
 
     public static void start(Instance instance) {
-        String directory = getRootDirectory(System.getProperty("user.dir"));
-        String script = directory + instance.getPath() + instance.getStart();
+        String directory = resolveTargetDirectory(instance.getPath());
+        String script = directory + instance.getStart();
 
         log.info("Starting " + instance.getName());
         log.info("Using start script: " + script);
 
-        execute(script, directory + instance.getPath());
+        execute(script, directory);
     }
 
     public static void stop(Instance instance) {
-        String directory = getRootDirectory(System.getProperty("user.dir"));
-        String script = directory + instance.getPath() + instance.getStop();
+        String directory = resolveTargetDirectory(instance.getPath());
+        String script = directory + instance.getStart();
 
         log.info("Stopping " + instance.getName());
         log.info("Using stop script: " + script);
 
-        execute(script, directory + instance.getPath());
+        execute(script, directory);
     }
 
     public static boolean isRunning(Instance instance) {
@@ -83,10 +85,14 @@ public final class InstanceManagementService {
         }
     }
 
-    private static String getRootDirectory(String currentDirectory) {
-        String userRootDirectory1 = currentDirectory.substring(0, currentDirectory.lastIndexOf("/"));
-        String userRootDirectory2 = userRootDirectory1.substring(0, userRootDirectory1.lastIndexOf("/"));
-        return userRootDirectory2 + "/";
+    private static String appendTrailingSlashIfNotPresent(String path) {
+        return String.valueOf(path.charAt(path.length() - 1)).equals("/") ? path : path + "/";
+    }
+
+    private static String resolveTargetDirectory(String relativePath) {
+        Path base = FileSystems.getDefault().getPath(System.getProperty("user.dir"));
+        Path resolved = base.resolve(relativePath);
+        return appendTrailingSlashIfNotPresent(resolved.normalize().toAbsolutePath().toString());
     }
 
 }

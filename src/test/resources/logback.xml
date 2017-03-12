@@ -10,7 +10,7 @@
         </layout>
     </appender>
 
-    <logger name="fm.pattern" level="ERROR" />
+    <logger name="fm.pattern" level="INFO" />
 
     <root>
         <appender-ref ref="CONSOLE" />
