@@ -19,18 +19,19 @@ package fm.pattern.cycle;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
+import fm.pattern.cycle.config.CycleConfiguration;
 import fm.pattern.cycle.junit.AcceptanceTestRunner;
 
 @RunWith(AcceptanceTestRunner.class)
 public abstract class AutomatedAcceptanceTest {
 
-	@BeforeClass
-	public static void start() {
-		RuntimeEnvironment.start();
-	}
+    @BeforeClass
+    public static void start() {
+        RuntimeEnvironment.start(CycleConfiguration.getInstances(), CycleConfiguration.getTimeout());
+    }
 
-	public static void stop() {
-		RuntimeEnvironment.stop();
-	}
+    public static void stop() {
+        RuntimeEnvironment.stop(CycleConfiguration.getInstances());
+    }
 
 }

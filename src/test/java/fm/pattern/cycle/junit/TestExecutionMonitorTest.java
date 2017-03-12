@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fm.pattern.cycle.PatternAssertions;
-import fm.pattern.cycle.config.CycleConfiguration;
 
 public class TestExecutionMonitorTest {
 
@@ -37,7 +36,7 @@ public class TestExecutionMonitorTest {
 
     @Test
     public void theClassShouldBeAWellDefinedUtilityClass() {
-        PatternAssertions.assertClass(CycleConfiguration.class).isAWellDefinedUtilityClass();
+        PatternAssertions.assertClass(TestExecutionMonitor.class).isAWellDefinedUtilityClass();
     }
 
 }

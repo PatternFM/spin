@@ -16,6 +16,8 @@
 
 package fm.pattern.cycle;
 
+import java.util.List;
+
 import fm.pattern.cycle.config.CycleConfiguration;
 
 public final class RuntimeEnvironment {
@@ -24,26 +26,26 @@ public final class RuntimeEnvironment {
 
     }
 
-    public static void start() {
-        CycleConfiguration.getInstances().forEach(instance -> instance.start());
+    public static void start(List<Instance> instances, Timeout timeout) {
+        instances.forEach(instance -> instance.start());
 
         Integer count = 0;
 
-        while (!running()) {
-            if (count > CycleConfiguration.getTimeout().getRetryCount()) {
+        while (!running(instances)) {
+            if (count > timeout.getRetryCount()) {
                 throw new TimeoutException("Timeout occurred while waiting for the runtime environment to boot. Timeout configuration: " + CycleConfiguration.getTimeout());
             }
-            pause(CycleConfiguration.getTimeout().getPollingInterval());
+            pause(timeout.getPollingInterval());
             count++;
         }
     }
 
-    public static void stop() {
-        CycleConfiguration.getInstances().forEach(instance -> instance.stop());
+    public static void stop(List<Instance> instances) {
+        instances.forEach(instance -> instance.stop());
     }
 
-    public static boolean running() {
-        return CycleConfiguration.getInstances().stream().filter(instance -> !instance.running()).count() == 0;
+    public static boolean running(List<Instance> instances) {
+        return instances.stream().filter(instance -> !instance.running()).count() == 0;
     }
 
     private static void pause(Integer milliseconds) {
