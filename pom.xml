@@ -142,7 +142,7 @@
             <configuration>
                <goals>deploy</goals>
                <autoversionsubmodules>true</autoversionsubmodules>
-               <tagNameFormat>pattern-cycle-@{project.version}</tagNameFormat>
+               <tagNameFormat>cycle-@{project.version}</tagNameFormat>
             </configuration>
             <dependencies>
                <dependency>
