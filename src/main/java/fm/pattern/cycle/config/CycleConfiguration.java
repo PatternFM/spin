@@ -30,7 +30,7 @@ import fm.pattern.cycle.Instance;
 import fm.pattern.cycle.Timeout;
 
 @SuppressWarnings("unchecked")
-public class CycleConfiguration {
+public final class CycleConfiguration {
 
     public static final Integer DEFAULT_RETRY_COUNT = 60;
     public static final Integer DEFAULT_POLLING_INTERVAL_MILLIS = 1000;
@@ -39,6 +39,10 @@ public class CycleConfiguration {
     private static final String default_filename = "cycle.yml";
 
     private static Map<String, Map<String, Object>> model;
+
+    private CycleConfiguration() {
+
+    }
 
     static {
         String configFilename = System.getProperty("cycle.config");
@@ -52,6 +56,10 @@ public class CycleConfiguration {
     }
 
     public static void load(String filename) {
+        if (model != null) {
+            model.clear();
+        }
+
         InputStream inputStream = CycleConfiguration.class.getClassLoader().getResourceAsStream(filename);
         if (inputStream == null) {
             log.warn("Unable to find " + filename + " on the classpath.");
@@ -97,7 +105,6 @@ public class CycleConfiguration {
             String ping = (String) map.get("ping");
 
             Instance instance = new Instance(service, path, ping);
-
             if (map.containsKey("start")) {
                 instance.setStart((String) map.get("start"));
             }

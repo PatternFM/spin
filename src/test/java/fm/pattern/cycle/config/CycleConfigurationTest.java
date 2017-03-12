@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.Test;
 
 import fm.pattern.cycle.Instance;
+import fm.pattern.cycle.PatternAssertions;
 import fm.pattern.cycle.Timeout;
 
 public class CycleConfigurationTest {
@@ -77,6 +78,22 @@ public class CycleConfigurationTest {
     @Test(expected = CycleConfigurationException.class)
     public void shouldThrowAConfigurationExceptionIfTheConfigurationFileCannotBeParsed() {
         CycleConfiguration.load("cycle-invalid.yml");
+    }
+
+    @Test
+    public void shouldProduceAnEmptyInstanceConfigurationWhenTheConfigurationFileToLoadCannotBeFound() {
+        CycleConfiguration.load("cycle-missing.yml");
+
+        Timeout timeout = CycleConfiguration.getTimeout();
+        assertThat(timeout.getPollingInterval()).isEqualTo(CycleConfiguration.DEFAULT_POLLING_INTERVAL_MILLIS);
+        assertThat(timeout.getRetryCount()).isEqualTo(CycleConfiguration.DEFAULT_RETRY_COUNT);
+
+        assertThat(CycleConfiguration.getInstances()).hasSize(0);
+    }
+
+    @Test
+    public void theClassShouldBeAWellDefinedUtilityClass() {
+        PatternAssertions.assertClass(CycleConfiguration.class).isAWellDefinedUtilityClass();
     }
 
 }
