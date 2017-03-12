@@ -4,7 +4,7 @@
 
    <groupId>fm.pattern</groupId>
    <artifactId>pattern-cycle</artifactId>
-   <version>1.0.0-SNAPSHOT</version>
+   <version>1.0.0</version>
    <packaging>jar</packaging>
 
    <properties>
@@ -17,7 +17,8 @@
 
    <scm>
       <developerConnection>scm:git:https://github.com/BrandonJohnGrenier/cycle.git</developerConnection>
-   </scm>
+     <tag>pattern-cycle-1.0.0</tag>
+  </scm>
 
    <licenses>
       <license>
