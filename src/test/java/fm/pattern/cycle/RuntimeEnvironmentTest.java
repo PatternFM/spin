@@ -29,7 +29,10 @@ public class RuntimeEnvironmentTest {
         MockitoAnnotations.initMocks(this);
         this.instances.add(instance1);
         this.instances.add(instance2);
-        this.timeout = new Timeout(100, 10);
+
+        this.timeout = new Timeout();
+        this.timeout.setPollingInterval(100);
+        this.timeout.setRetryCount(10);
     }
 
     @Test(expected = TimeoutException.class)
@@ -79,6 +82,11 @@ public class RuntimeEnvironmentTest {
         Mockito.when(instance2.running()).thenReturn(false);
 
         Assertions.assertThat(RuntimeEnvironment.running(instances)).isFalse();
+    }
+
+    @Test
+    public void theClassShouldBeAWellDefinedUtilityClass() {
+        PatternAssertions.assertClass(RuntimeEnvironment.class).isAWellDefinedUtilityClass();
     }
 
 }
