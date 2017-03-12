@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import fm.pattern.cycle.Instance;
@@ -32,7 +32,7 @@ import fm.pattern.cycle.Timeout;
 @SuppressWarnings("unchecked")
 public class CycleConfiguration {
 
-    private static final Log log = LogFactory.getLog(CycleConfiguration.class);
+    private static final Logger log = LoggerFactory.getLogger(CycleConfiguration.class);
     private static final String DEFAULT_CONFIG_FILENAME = "cycle.yml";
 
     private static Map<String, Map<String, Object>> model;
@@ -63,7 +63,7 @@ public class CycleConfiguration {
         }
     }
 
-    public static Timeout getStartupConfiguration() {
+    public static Timeout getTimeout() {
         for (Map.Entry<String, Map<String, Object>> entry : model.entrySet()) {
             String key = entry.getKey();
 

@@ -18,40 +18,41 @@ package fm.pattern.cycle;
 
 import fm.pattern.cycle.config.CycleConfiguration;
 
-public class RuntimeEnvironment {
+public final class RuntimeEnvironment {
 
-	private RuntimeEnvironment() {
+    private RuntimeEnvironment() {
 
-	}
+    }
 
-	public static void start() {
-		CycleConfiguration.instances().forEach(instance -> instance.start());
+    public static void start() {
+        CycleConfiguration.instances().forEach(instance -> instance.start());
 
-		Integer count = 0;
-		while (!running()) {
-			if (count > CycleConfiguration.getStartupConfiguration().getRetryCount()) {
-				throw new IllegalStateException("Timeout occurred while waiting for the runtime environment to boot.");
-			}
-			pause(CycleConfiguration.getStartupConfiguration().getPollingInterval());
-			count++;
-		}
-	}
+        Integer count = 0;
 
-	public static void stop() {
-		CycleConfiguration.instances().forEach(instance -> instance.stop());
-	}
+        while (!running()) {
+            if (count > CycleConfiguration.getTimeout().getRetryCount()) {
+                throw new TimeoutException("Timeout occurred while waiting for the runtime environment to boot. Timeout configuration: " + CycleConfiguration.getTimeout());
+            }
+            pause(CycleConfiguration.getTimeout().getPollingInterval());
+            count++;
+        }
+    }
 
-	public static boolean running() {
-		return CycleConfiguration.instances().stream().filter(instance -> !instance.running()).count() == 0;
-	}
+    public static void stop() {
+        CycleConfiguration.instances().forEach(instance -> instance.stop());
+    }
 
-	public static void pause(Integer milliseconds) {
-		try {
-			Thread.sleep(milliseconds);
-		}
-		catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
+    public static boolean running() {
+        return CycleConfiguration.instances().stream().filter(instance -> !instance.running()).count() == 0;
+    }
+
+    private static void pause(Integer milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
