@@ -31,9 +31,14 @@ public class InstanceManagementServiceTest {
     }
 
     @Test
-    public void shouldBeAbleToExecuteAStopScriptWhenTheStartScriptIsPresentAndReturnsAnExitCodeOfZero() {
-        instance.setStart("test-stop.sh");
+    public void shouldBeAbleToExecuteAStopScriptWhenTheStopScriptIsPresentAndReturnsAnExitCodeOfZero() {
+        instance.setStop("test-stop.sh");
         InstanceManagementService.stop(instance);
+    }
+
+    @Test
+    public void theClassShouldBeAWellDefinedUtilityClass() {
+        PatternAssertions.assertClass(InstanceManagementService.class).isAWellDefinedUtilityClass();
     }
 
 }

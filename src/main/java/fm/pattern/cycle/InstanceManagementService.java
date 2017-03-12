@@ -34,7 +34,7 @@ public final class InstanceManagementService {
 
     public static void stop(Instance instance) {
         String directory = resolveTargetDirectory(instance.getPath());
-        String script = directory + instance.getStart();
+        String script = directory + instance.getStop();
 
         log.info("Stopping " + instance.getName());
         log.info("Using stop script: " + script);
@@ -77,10 +77,13 @@ public final class InstanceManagementService {
             process.destroy();
 
             if (exitValue != 0 && exitValue != 7) {
-                throw new InstanceManagementException("The script finished with exit code: " + exitValue);
+                String message = "Script '" + script + "'completed with exit code: " + exitValue;
+                log.error(message);
+                throw new InstanceManagementException(message);
             }
         }
         catch (Exception e) {
+            log.error("Failed to execute script:", e);
             throw new InstanceManagementException("Failed to execute script: ", e);
         }
     }
