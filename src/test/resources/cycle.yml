@@ -1,6 +1,9 @@
 Test Service 1: 
   path: test-path-1
   ping: http://localhost:8080/v1/ping
+  environment:
+    key1: value1
+    key2: value2
   
 Test Service 2: 
   path: test-path-2

@@ -112,11 +112,17 @@ public final class CycleConfiguration {
             }
 
             Instance instance = new Instance(name, path, ping);
+
             if (map.containsKey("start")) {
                 instance.setStart((String) map.get("start"));
             }
             if (map.containsKey("stop")) {
                 instance.setStop((String) map.get("stop"));
+            }
+
+            Map<String, String> environment = (Map<String, String>) map.get("environment");
+            if (environment != null && !environment.isEmpty()) {
+                instance.setEnvironment(environment);
             }
 
             instances.add(instance);

@@ -29,7 +29,7 @@ public final class InstanceManagementService {
         log.info("Starting " + instance.getName());
         log.info("Using start script: " + script);
 
-        execute(script, directory);
+        execute(script, directory, instance.getEnvironment());
     }
 
     public static void stop(Instance instance) {
@@ -39,7 +39,7 @@ public final class InstanceManagementService {
         log.info("Stopping " + instance.getName());
         log.info("Using stop script: " + script);
 
-        execute(script, directory);
+        execute(script, directory, instance.getEnvironment());
     }
 
     public static boolean isRunning(Instance instance) {
@@ -52,17 +52,12 @@ public final class InstanceManagementService {
         }
     }
 
-    private static void execute(String script, String directory) {
+    private static void execute(String script, String directory, Map<String, String> environment) {
         try {
             ProcessBuilder builder = new ProcessBuilder("/bin/sh", script);
             builder.directory(new File(directory));
-
-            Map<String, String> map = builder.environment();
-            String path = map.get("PATH");
-            String newPath = path += ":/usr/local/bin";
-            map.put("PATH", newPath);
-
             builder.redirectErrorStream(true);
+            configureEnvironment(builder, environment);
 
             Process process = builder.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -95,6 +90,14 @@ public final class InstanceManagementService {
         Path base = FileSystems.getDefault().getPath(System.getProperty("user.dir"));
         Path resolved = base.resolve(relativePath);
         return appendTrailingSlashIfNotPresent(resolved.normalize().toAbsolutePath().toString());
+    }
+
+    private static void configureEnvironment(ProcessBuilder builder, Map<String, String> environment) {
+        Map<String, String> map = builder.environment();
+        map.put("PATH", map.get("PATH") + ":/usr/local/bin");
+        for (Map.Entry<String, String> entry : environment.entrySet()) {
+            map.put(entry.getKey(), entry.getValue());
+        }
     }
 
 }

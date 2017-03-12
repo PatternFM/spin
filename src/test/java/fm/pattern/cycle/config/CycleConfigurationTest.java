@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.StrictAssertions.assertThat;
 
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +33,14 @@ public class CycleConfigurationTest {
         assertThat(first.getPing()).isEqualTo("http://localhost:8080/v1/ping");
         assertThat(first.getStart()).isEqualTo("start.sh");
         assertThat(first.getStop()).isEqualTo("stop.sh");
+
+        Map<String, String> environment = first.getEnvironment();
+        assertThat(environment).hasSize(2);
+        assertThat(environment).containsKey("key1");
+        assertThat(environment).containsKey("key2");
+
+        assertThat(environment.get("key1")).isEqualTo("value1");
+        assertThat(environment.get("key2")).isEqualTo("value2");
 
         Instance second = instances.get(1);
         assertThat(second.getName()).isEqualTo("Test Service 2");

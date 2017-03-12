@@ -16,75 +16,88 @@
 
 package fm.pattern.cycle;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Instance {
 
-	private String name;
-	private String path;
-	private String ping;
+    private String name;
+    private String path;
+    private String ping;
 
-	private String start = "start.sh";
-	private String stop = "stop.sh";
+    private String start = "start.sh";
+    private String stop = "stop.sh";
 
-	public Instance(String name, String path, String ping) {
-		this.name = name;
-		this.path = path;
-		this.ping = ping;
-	}
+    private Map<String, String> environment = new HashMap<>();
 
-	public String getName() {
-		return name;
-	}
+    public Instance(String name, String path, String ping) {
+        this.name = name;
+        this.path = path;
+        this.ping = ping;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getPath() {
-		return path;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setPath(String path) {
-		this.path = path;
-	}
+    public String getPath() {
+        return path;
+    }
 
-	public String getPing() {
-		return ping;
-	}
+    public void setPath(String path) {
+        this.path = path;
+    }
 
-	public void setPing(String ping) {
-		this.ping = ping;
-	}
+    public String getPing() {
+        return ping;
+    }
 
-	public String getStart() {
-		return start;
-	}
+    public void setPing(String ping) {
+        this.ping = ping;
+    }
 
-	public void setStart(String start) {
-		this.start = start;
-	}
+    public String getStart() {
+        return start;
+    }
 
-	public String getStop() {
-		return stop;
-	}
+    public void setStart(String start) {
+        this.start = start;
+    }
 
-	public void setStop(String stop) {
-		this.stop = stop;
-	}
+    public String getStop() {
+        return stop;
+    }
 
-	public boolean running() {
-		return InstanceManagementService.isRunning(this);
-	}
+    public void setStop(String stop) {
+        this.stop = stop;
+    }
 
-	public void start() {
-		if (!running()) {
-			InstanceManagementService.start(this);
-		}
-	}
+    public Map<String, String> getEnvironment() {
+        return environment;
+    }
 
-	public void stop() {
-		if (running()) {
-			InstanceManagementService.stop(this);
-		}
-	}
+    public void setEnvironment(Map<String, String> environment) {
+        this.environment = environment;
+    }
+
+    public boolean running() {
+        return InstanceManagementService.isRunning(this);
+    }
+
+    public void start() {
+        if (!running()) {
+            InstanceManagementService.start(this);
+        }
+    }
+
+    public void stop() {
+        if (running()) {
+            InstanceManagementService.stop(this);
+        }
+    }
 
 }
