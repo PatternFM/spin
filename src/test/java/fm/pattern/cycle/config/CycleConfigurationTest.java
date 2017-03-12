@@ -82,8 +82,20 @@ public class CycleConfigurationTest {
     }
 
     @Test(expected = CycleConfigurationException.class)
-    public void shouldThrowAConfigurationExceptionIfTheConfigurationFileCannotBeParsed() {
+    public void shouldThrowACycleConfigurationExceptionIfTheConfigurationFileCannotBeParsed() {
         CycleConfiguration.load("cycle-invalid.yml");
+    }
+
+    @Test(expected = CycleConfigurationException.class)
+    public void shouldThrowACycleConfigurationExceptionIfAServiceDoesNotContainAPingAttribute() {
+        CycleConfiguration.load("cycle-missing-ping.yml");
+        CycleConfiguration.getInstances();
+    }
+
+    @Test(expected = CycleConfigurationException.class)
+    public void shouldThrowACycleConfigurationExceptionIfAServiceDoesNotContainAPathAttribute() {
+        CycleConfiguration.load("cycle-missing-path.yml");
+        CycleConfiguration.getInstances();
     }
 
     @Test

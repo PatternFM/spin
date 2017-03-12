@@ -61,7 +61,7 @@ public final class CycleConfiguration {
             model.clear();
         }
     }
-    
+
     public static void load(String filename) {
         InputStream inputStream = CycleConfiguration.class.getClassLoader().getResourceAsStream(filename);
         if (inputStream == null) {
@@ -97,9 +97,9 @@ public final class CycleConfiguration {
         List<Instance> instances = new ArrayList<>();
 
         for (Map.Entry<String, Map<String, Object>> entry : model.entrySet()) {
-            String service = entry.getKey();
+            String name = entry.getKey();
 
-            if (service.equals("startup")) {
+            if (name.equals("startup")) {
                 continue;
             }
 
@@ -107,7 +107,11 @@ public final class CycleConfiguration {
             String path = (String) map.get("path");
             String ping = (String) map.get("ping");
 
-            Instance instance = new Instance(service, path, ping);
+            if (StringUtils.isEmpty(path) || StringUtils.isBlank(ping)) {
+                throw new CycleConfigurationException("Invalid cycle configuration - the path and ping attributes must be set for " + name);
+            }
+
+            Instance instance = new Instance(name, path, ping);
             if (map.containsKey("start")) {
                 instance.setStart((String) map.get("start"));
             }
