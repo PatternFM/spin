@@ -1,5 +1,8 @@
 package fm.pattern.cycle;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +14,9 @@ public class InstanceManagementServiceTest {
     @Before
     public void before() {
         this.instance = new Instance("name", ".", "http://localhost:8080/v1/ping");
+        Map<String, String> environment = new HashMap<>();
+        environment.put("key", "value");
+        instance.setEnvironment(environment);
     }
 
     @Test

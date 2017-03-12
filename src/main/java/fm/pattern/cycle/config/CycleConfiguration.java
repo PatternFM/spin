@@ -70,6 +70,7 @@ public final class CycleConfiguration {
         }
 
         try {
+            log.info("Using Cycle configuration file: " + filename);
             model = (Map<String, Map<String, Object>>) new Yaml().load(inputStream);
         }
         catch (Exception e) {
