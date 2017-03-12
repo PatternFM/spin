@@ -72,8 +72,7 @@ public final class InstanceManagementService {
                 log.debug(line);
             }
 
-            process.waitFor();
-            int exitValue = process.exitValue();
+            Integer exitValue = process.waitFor();
             process.destroy();
 
             if (exitValue != 0 && exitValue != 7) {
