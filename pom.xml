@@ -3,8 +3,8 @@
    <modelVersion>4.0.0</modelVersion>
 
    <groupId>fm.pattern</groupId>
-   <artifactId>pattern-cycle</artifactId>
-   <version>1.0.2-SNAPSHOT</version>
+   <artifactId>cycle</artifactId>
+   <version>1.0.0-SNAPSHOT</version>
    <packaging>jar</packaging>
 
    <properties>
@@ -16,7 +16,7 @@
    </properties>
 
    <scm>
-      <developerConnection>scm:git:https://github.com/BrandonJohnGrenier/cycle.git</developerConnection>
+      <developerConnection>scm:git:https://github.com/PatternFM/cycle.git</developerConnection>
      <tag>HEAD</tag>
   </scm>
 
@@ -31,8 +31,8 @@
    <dependencies>
       <dependency>
          <groupId>fm.pattern</groupId>
-         <artifactId>pattern-commons-util</artifactId>
-         <version>1.0.1</version>
+         <artifactId>commons-util</artifactId>
+         <version>1.0.0</version>
       </dependency>
 
       <dependency>
@@ -161,7 +161,7 @@
             <configuration>
                <goals>deploy</goals>
                <autoversionsubmodules>true</autoversionsubmodules>
-               <tagNameFormat>pattern-cycle-@{project.version}</tagNameFormat>
+               <tagNameFormat>cycle-@{project.version}</tagNameFormat>
             </configuration>
             <dependencies>
                <dependency>
