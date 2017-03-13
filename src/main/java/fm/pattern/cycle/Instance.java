@@ -30,6 +30,8 @@ public class Instance {
 
     private Map<String, String> environment = new HashMap<>();
 
+    private boolean shouldTerminate = false;
+
     public Instance(String name, String path, String ping) {
         this.name = name;
         this.path = path;
@@ -90,12 +92,13 @@ public class Instance {
 
     public void start() {
         if (!running()) {
+            shouldTerminate = true;
             InstanceManagementService.start(this);
         }
     }
 
     public void stop() {
-        if (running()) {
+        if (running() && shouldTerminate) {
             InstanceManagementService.stop(this);
         }
     }
