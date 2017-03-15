@@ -17,6 +17,7 @@
 package fm.pattern.cycle;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import fm.pattern.cycle.config.CycleConfiguration;
 
@@ -33,7 +34,8 @@ public final class RuntimeEnvironment {
 
         while (!running(instances)) {
             if (count > timeout.getRetryCount()) {
-                throw new TimeoutException("Timeout occurred while waiting for the runtime environment to boot. Timeout configuration: " + CycleConfiguration.getTimeout());
+                String names = instances.stream().map(i -> i.getName()).collect(Collectors.joining(","));
+                throw new TimeoutException("Timeout occurred while waiting for " + names + " to start up. Timeout configuration: " + CycleConfiguration.getTimeout());
             }
             pause(timeout.getPollingInterval());
             count++;

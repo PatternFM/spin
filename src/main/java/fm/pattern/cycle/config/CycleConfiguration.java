@@ -99,7 +99,7 @@ public final class CycleConfiguration {
             String ping = (String) map.get("ping");
 
             if (StringUtils.isEmpty(path) || StringUtils.isBlank(ping)) {
-                throw new CycleConfigurationException("Invalid cycle configuration - the path and ping attributes must be set for " + name);
+                throw new CycleConfigurationException("Invalid cycle configuration - path and ping attributes are required for " + name);
             }
 
             Instance instance = new Instance(name, path, ping);

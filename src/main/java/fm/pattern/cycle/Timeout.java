@@ -17,6 +17,7 @@
 package fm.pattern.cycle;
 
 import fm.pattern.commons.util.JSON;
+import fm.pattern.cycle.config.CycleConfiguration;
 
 public class Timeout {
 
@@ -28,16 +29,12 @@ public class Timeout {
     }
 
     public Timeout(Integer pollingInterval, Integer retryCount) {
-        if (pollingInterval != null) {
-            this.pollingInterval = pollingInterval;
-        }
-        if (retryCount != null) {
-            this.retryCount = retryCount;
-        }
+        this.pollingInterval = pollingInterval;
+        this.retryCount = retryCount;
     }
 
     public Integer getPollingInterval() {
-        return pollingInterval;
+        return pollingInterval == null ? CycleConfiguration.DEFAULT_POLLING_INTERVAL_MILLIS : pollingInterval;
     }
 
     public void setPollingInterval(Integer pollingInterval) {
@@ -45,7 +42,7 @@ public class Timeout {
     }
 
     public Integer getRetryCount() {
-        return retryCount;
+        return retryCount == null ? CycleConfiguration.DEFAULT_RETRY_COUNT : retryCount;
     }
 
     public void setRetryCount(Integer retryCount) {
