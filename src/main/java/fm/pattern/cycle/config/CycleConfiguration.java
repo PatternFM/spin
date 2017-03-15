@@ -38,28 +38,22 @@ public final class CycleConfiguration {
     private static final Logger log = LoggerFactory.getLogger(CycleConfiguration.class);
     private static final String default_filename = "cycle.yml";
 
-    private static Map<String, Map<String, Object>> model;
+    private static List<Instance> instances = null;
+    private static Timeout timeout = null;
 
     private CycleConfiguration() {
 
     }
 
     static {
-        String configFilename = System.getProperty("cycle.config");
-
-        if (StringUtils.isNotBlank(configFilename)) {
-            load(configFilename);
-        }
-        else {
-            load(default_filename);
-        }
+        String filename = System.getProperty("cycle.config");
+        load(StringUtils.isNotBlank(filename) ? filename : default_filename);
     }
 
     static void reset() {
         System.clearProperty("cycle.config");
-        if (model != null) {
-            model.clear();
-        }
+        instances = null;
+        timeout = null;
     }
 
     public static void load(String filename) {
@@ -71,30 +65,26 @@ public final class CycleConfiguration {
 
         try {
             log.info("Using Cycle configuration file: " + filename);
-            model = (Map<String, Map<String, Object>>) new Yaml().load(inputStream);
+
+            Map<String, Map<String, Object>> model = (Map<String, Map<String, Object>>) new Yaml().load(inputStream);
+            timeout = resolveTimeout(model);
+            instances = resolveInstances(model);
         }
         catch (Exception e) {
             throw new CycleConfigurationException("Failed to parse " + filename + ":", e);
         }
-    }
 
-    public static Timeout getTimeout() {
-        for (Map.Entry<String, Map<String, Object>> entry : model.entrySet()) {
-            String key = entry.getKey();
-
-            if (key.equals("startup")) {
-                Map<String, Object> map = entry.getValue();
-                Integer pollingInterval = map.containsKey("polling_interval") ? (Integer) map.get("polling_interval") : DEFAULT_POLLING_INTERVAL_MILLIS;
-                Integer retryCount = map.containsKey("retry_count") ? (Integer) map.get("retry_count") : DEFAULT_RETRY_COUNT;
-                return new Timeout(pollingInterval, retryCount);
-            }
-
-        }
-
-        return new Timeout(DEFAULT_POLLING_INTERVAL_MILLIS, DEFAULT_RETRY_COUNT);
     }
 
     public static List<Instance> getInstances() {
+        return instances != null ? instances : new ArrayList<Instance>();
+    }
+
+    public static Timeout getTimeout() {
+        return timeout != null ? timeout : new Timeout(DEFAULT_POLLING_INTERVAL_MILLIS, DEFAULT_RETRY_COUNT);
+    }
+
+    private static List<Instance> resolveInstances(Map<String, Map<String, Object>> model) {
         List<Instance> instances = new ArrayList<>();
 
         for (Map.Entry<String, Map<String, Object>> entry : model.entrySet()) {
@@ -130,6 +120,22 @@ public final class CycleConfiguration {
         }
 
         return instances;
+    }
+
+    private static Timeout resolveTimeout(Map<String, Map<String, Object>> model) {
+        for (Map.Entry<String, Map<String, Object>> entry : model.entrySet()) {
+            String key = entry.getKey();
+
+            if (key.equals("startup")) {
+                Map<String, Object> map = entry.getValue();
+                Integer pollingInterval = map.containsKey("polling_interval") ? (Integer) map.get("polling_interval") : DEFAULT_POLLING_INTERVAL_MILLIS;
+                Integer retryCount = map.containsKey("retry_count") ? (Integer) map.get("retry_count") : DEFAULT_RETRY_COUNT;
+                return new Timeout(pollingInterval, retryCount);
+            }
+
+        }
+
+        return new Timeout(DEFAULT_POLLING_INTERVAL_MILLIS, DEFAULT_RETRY_COUNT);
     }
 
 }
