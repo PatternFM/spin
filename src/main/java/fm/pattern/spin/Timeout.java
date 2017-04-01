@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package fm.pattern.cycle;
+package fm.pattern.spin;
 
-import fm.pattern.commons.util.JSON;
-import fm.pattern.cycle.config.CycleConfiguration;
+import fm.pattern.minimal.JSON;
+import fm.pattern.spin.config.SpinConfiguration;
 
 public class Timeout {
 
@@ -34,7 +34,7 @@ public class Timeout {
     }
 
     public Integer getPollingInterval() {
-        return pollingInterval == null ? CycleConfiguration.DEFAULT_POLLING_INTERVAL_MILLIS : pollingInterval;
+        return pollingInterval == null ? SpinConfiguration.DEFAULT_POLLING_INTERVAL_MILLIS : pollingInterval;
     }
 
     public void setPollingInterval(Integer pollingInterval) {
@@ -42,7 +42,7 @@ public class Timeout {
     }
 
     public Integer getRetryCount() {
-        return retryCount == null ? CycleConfiguration.DEFAULT_RETRY_COUNT : retryCount;
+        return retryCount == null ? SpinConfiguration.DEFAULT_RETRY_COUNT : retryCount;
     }
 
     public void setRetryCount(Integer retryCount) {

@@ -1,4 +1,4 @@
-package fm.pattern.cycle;
+package fm.pattern.spin;
 
 import java.io.BufferedReader;
 import java.io.File;

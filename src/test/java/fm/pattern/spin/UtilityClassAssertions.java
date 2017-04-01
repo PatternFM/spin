@@ -1,4 +1,4 @@
-package fm.pattern.cycle;
+package fm.pattern.spin;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;

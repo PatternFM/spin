@@ -1,4 +1,4 @@
-package fm.pattern.cycle;
+package fm.pattern.spin;
 
 public class TimeoutException extends RuntimeException {
 

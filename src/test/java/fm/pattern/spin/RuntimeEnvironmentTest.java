@@ -1,4 +1,4 @@
-package fm.pattern.cycle;
+package fm.pattern.spin;
 
 import static org.mockito.Mockito.verify;
 
@@ -11,6 +11,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+
+import fm.pattern.spin.Instance;
+import fm.pattern.spin.RuntimeEnvironment;
+import fm.pattern.spin.Timeout;
+import fm.pattern.spin.TimeoutException;
 
 public class RuntimeEnvironmentTest {
 

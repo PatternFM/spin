@@ -1,4 +1,4 @@
-package fm.pattern.cycle.junit;
+package fm.pattern.spin.junit;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
@@ -9,7 +9,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import fm.pattern.cycle.config.CycleConfigurationTest;
+import fm.pattern.spin.config.SpinConfigurationTest;
+import fm.pattern.spin.junit.AcceptanceTestRunner;
+import fm.pattern.spin.junit.TestExecutionMonitor;
 
 public class AcceptanceTestRunnerTest {
 
@@ -29,13 +31,13 @@ public class AcceptanceTestRunnerTest {
         new AcceptanceTestRunner(TestExecutionMonitorTest.class);
         Assertions.assertThat(TestExecutionMonitor.getTestClassesToRun()).isEqualTo(1);
 
-        new AcceptanceTestRunner(CycleConfigurationTest.class);
+        new AcceptanceTestRunner(SpinConfigurationTest.class);
         Assertions.assertThat(TestExecutionMonitor.getTestClassesToRun()).isEqualTo(2);
     }
 
     @Test
     public void shouldBeAbleToAddANewRunListenerWhenTheRunnerIsRun() throws Exception {
-        AcceptanceTestRunner runner = new AcceptanceTestRunner(CycleConfigurationTest.class);
+        AcceptanceTestRunner runner = new AcceptanceTestRunner(SpinConfigurationTest.class);
         runner.run(notifier);
 
         Mockito.verify(notifier, Mockito.times(1)).addListener((RunListener) Mockito.anyObject());

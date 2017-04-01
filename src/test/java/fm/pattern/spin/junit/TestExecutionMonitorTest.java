@@ -1,10 +1,11 @@
-package fm.pattern.cycle.junit;
+package fm.pattern.spin.junit;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 
-import fm.pattern.cycle.PatternAssertions;
+import fm.pattern.spin.PatternAssertions;
+import fm.pattern.spin.junit.TestExecutionMonitor;
 
 public class TestExecutionMonitorTest {
 

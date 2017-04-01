@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package fm.pattern.cycle;
+package fm.pattern.spin;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import fm.pattern.cycle.config.CycleConfiguration;
+import fm.pattern.spin.config.SpinConfiguration;
 
 public final class RuntimeEnvironment {
 
@@ -35,7 +35,7 @@ public final class RuntimeEnvironment {
         while (!running(instances)) {
             if (count > timeout.getRetryCount()) {
                 String names = instances.stream().map(i -> i.getName()).collect(Collectors.joining(","));
-                throw new TimeoutException("Timeout occurred while waiting for " + names + " to start up. Timeout configuration: " + CycleConfiguration.getTimeout());
+                throw new TimeoutException("Timeout occurred while waiting for " + names + " to start up. Timeout configuration: " + SpinConfiguration.getTimeout());
             }
             pause(timeout.getPollingInterval());
             count++;

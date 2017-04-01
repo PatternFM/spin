@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fm.pattern.cycle;
+package fm.pattern.spin;
 
 import java.util.HashMap;
 import java.util.Map;

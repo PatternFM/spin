@@ -1,4 +1,4 @@
-package fm.pattern.cycle.config;
+package fm.pattern.spin.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.StrictAssertions.assertThat;
@@ -9,22 +9,24 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import fm.pattern.cycle.Instance;
-import fm.pattern.cycle.PatternAssertions;
-import fm.pattern.cycle.Timeout;
+import fm.pattern.spin.Instance;
+import fm.pattern.spin.PatternAssertions;
+import fm.pattern.spin.Timeout;
+import fm.pattern.spin.config.SpinConfiguration;
+import fm.pattern.spin.config.SpinConfigurationException;
 
-public class CycleConfigurationTest {
+public class SpinConfigurationTest {
 
     @Before
     public void before() {
-        CycleConfiguration.reset();
+        SpinConfiguration.reset();
     }
 
     @Test
     public void shouldBeAbleToLoadInstancesFromTheDefaultCycleConfigurationFile() {
-        CycleConfiguration.load("cycle.yml");
+        SpinConfiguration.load("spin.yml");
 
-        List<Instance> instances = CycleConfiguration.getInstances();
+        List<Instance> instances = SpinConfiguration.getInstances();
         assertThat(instances).hasSize(2);
 
         Instance first = instances.get(0);
@@ -52,27 +54,27 @@ public class CycleConfigurationTest {
 
     @Test
     public void shouldBeAbleToProduceDefaultTimeoutSettingsIfTheSettingsAreNotProvided() {
-        CycleConfiguration.load("cycle.yml");
+        SpinConfiguration.load("spin.yml");
 
-        Timeout timeout = CycleConfiguration.getTimeout();
-        assertThat(timeout.getPollingInterval()).isEqualTo(CycleConfiguration.DEFAULT_POLLING_INTERVAL_MILLIS);
-        assertThat(timeout.getRetryCount()).isEqualTo(CycleConfiguration.DEFAULT_RETRY_COUNT);
+        Timeout timeout = SpinConfiguration.getTimeout();
+        assertThat(timeout.getPollingInterval()).isEqualTo(SpinConfiguration.DEFAULT_POLLING_INTERVAL_MILLIS);
+        assertThat(timeout.getRetryCount()).isEqualTo(SpinConfiguration.DEFAULT_RETRY_COUNT);
     }
 
     @Test
     public void shouldBeAbleToOverrideDefaultTimeoutSettingsThroughConfiguration() {
-        CycleConfiguration.load("cycle-ci.yml");
+        SpinConfiguration.load("spin-ci.yml");
 
-        Timeout timeout = CycleConfiguration.getTimeout();
+        Timeout timeout = SpinConfiguration.getTimeout();
         assertThat(timeout.getPollingInterval()).isEqualTo(5000);
         assertThat(timeout.getRetryCount()).isEqualTo(10);
     }
 
     @Test
     public void shouldBeAbleToLoadInstancesFromTheCycleConfigSystemProperty() {
-        CycleConfiguration.load("cycle-ci.yml");
+        SpinConfiguration.load("spin-ci.yml");
 
-        List<Instance> instances = CycleConfiguration.getInstances();
+        List<Instance> instances = SpinConfiguration.getInstances();
         assertThat(instances).hasSize(2);
 
         Instance first = instances.get(0);
@@ -90,37 +92,37 @@ public class CycleConfigurationTest {
         assertThat(second.getStop()).isEqualTo("stop-service.bat");
     }
 
-    @Test(expected = CycleConfigurationException.class)
+    @Test(expected = SpinConfigurationException.class)
     public void shouldThrowACycleConfigurationExceptionIfTheConfigurationFileCannotBeParsed() {
-        CycleConfiguration.load("cycle-invalid.yml");
+        SpinConfiguration.load("spin-invalid.yml");
     }
 
-    @Test(expected = CycleConfigurationException.class)
+    @Test(expected = SpinConfigurationException.class)
     public void shouldThrowACycleConfigurationExceptionIfAServiceDoesNotContainAPingAttribute() {
-        CycleConfiguration.load("cycle-missing-ping.yml");
-        CycleConfiguration.getInstances();
+        SpinConfiguration.load("spin-missing-ping.yml");
+        SpinConfiguration.getInstances();
     }
 
-    @Test(expected = CycleConfigurationException.class)
+    @Test(expected = SpinConfigurationException.class)
     public void shouldThrowACycleConfigurationExceptionIfAServiceDoesNotContainAPathAttribute() {
-        CycleConfiguration.load("cycle-missing-path.yml");
-        CycleConfiguration.getInstances();
+        SpinConfiguration.load("spin-missing-path.yml");
+        SpinConfiguration.getInstances();
     }
 
     @Test
     public void shouldProduceAnEmptyInstanceConfigurationWhenTheConfigurationFileToLoadCannotBeFound() {
-        CycleConfiguration.load("cycle-missing.yml");
+        SpinConfiguration.load("spin-missing.yml");
 
-        Timeout timeout = CycleConfiguration.getTimeout();
-        assertThat(timeout.getPollingInterval()).isEqualTo(CycleConfiguration.DEFAULT_POLLING_INTERVAL_MILLIS);
-        assertThat(timeout.getRetryCount()).isEqualTo(CycleConfiguration.DEFAULT_RETRY_COUNT);
+        Timeout timeout = SpinConfiguration.getTimeout();
+        assertThat(timeout.getPollingInterval()).isEqualTo(SpinConfiguration.DEFAULT_POLLING_INTERVAL_MILLIS);
+        assertThat(timeout.getRetryCount()).isEqualTo(SpinConfiguration.DEFAULT_RETRY_COUNT);
 
-        assertThat(CycleConfiguration.getInstances()).hasSize(0);
+        assertThat(SpinConfiguration.getInstances()).hasSize(0);
     }
 
     @Test
     public void theClassShouldBeAWellDefinedUtilityClass() {
-        PatternAssertions.assertClass(CycleConfiguration.class).isAWellDefinedUtilityClass();
+        PatternAssertions.assertClass(SpinConfiguration.class).isAWellDefinedUtilityClass();
     }
 
 }

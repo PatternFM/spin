@@ -1,4 +1,4 @@
-package fm.pattern.cycle;
+package fm.pattern.spin;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,6 +6,10 @@ import java.util.Map;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
+
+import fm.pattern.spin.Instance;
+import fm.pattern.spin.InstanceManagementException;
+import fm.pattern.spin.InstanceManagementService;
 
 public class InstanceManagementServiceTest {
 

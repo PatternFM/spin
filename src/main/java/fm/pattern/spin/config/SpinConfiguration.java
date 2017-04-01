@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package fm.pattern.cycle.config;
+package fm.pattern.spin.config;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -26,27 +26,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
-import fm.pattern.cycle.Instance;
-import fm.pattern.cycle.Timeout;
+import fm.pattern.spin.Instance;
+import fm.pattern.spin.Timeout;
 
 @SuppressWarnings("unchecked")
-public final class CycleConfiguration {
+public final class SpinConfiguration {
 
     public static final Integer DEFAULT_RETRY_COUNT = 60;
     public static final Integer DEFAULT_POLLING_INTERVAL_MILLIS = 1000;
 
-    private static final Logger log = LoggerFactory.getLogger(CycleConfiguration.class);
-    private static final String default_filename = "cycle.yml";
+    private static final Logger log = LoggerFactory.getLogger(SpinConfiguration.class);
+    private static final String default_filename = "spin.yml";
 
     private static List<Instance> instances = null;
     private static Timeout timeout = null;
 
-    private CycleConfiguration() {
+    private SpinConfiguration() {
 
     }
 
     static {
-        String filename = System.getProperty("cycle.config");
+        String filename = System.getProperty("spin.config");
         load(StringUtils.isNotBlank(filename) ? filename : default_filename);
     }
 
@@ -57,21 +57,21 @@ public final class CycleConfiguration {
     }
 
     public static void load(String filename) {
-        InputStream inputStream = CycleConfiguration.class.getClassLoader().getResourceAsStream(filename);
+        InputStream inputStream = SpinConfiguration.class.getClassLoader().getResourceAsStream(filename);
         if (inputStream == null) {
             log.warn("Unable to find " + filename + " on the classpath.");
             return;
         }
 
         try {
-            log.info("Using Cycle configuration file: " + filename);
+            log.info("Using Spin configuration file: " + filename);
 
             Map<String, Map<String, Object>> model = (Map<String, Map<String, Object>>) new Yaml().load(inputStream);
             timeout = resolveTimeout(model);
             instances = resolveInstances(model);
         }
         catch (Exception e) {
-            throw new CycleConfigurationException("Failed to parse " + filename + ":", e);
+            throw new SpinConfigurationException("Spin failed to parse file '" + filename + "'", e);
         }
 
     }
@@ -99,7 +99,7 @@ public final class CycleConfiguration {
             String ping = (String) map.get("ping");
 
             if (StringUtils.isEmpty(path) || StringUtils.isBlank(ping)) {
-                throw new CycleConfigurationException("Invalid cycle configuration - path and ping attributes are required for " + name);
+                throw new SpinConfigurationException("Invalid Spin configuration - 'path' and 'ping' are required attributes for " + name);
             }
 
             Instance instance = new Instance(name, path, ping);

@@ -1,7 +1,9 @@
-package fm.pattern.cycle;
+package fm.pattern.spin;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
+
+import fm.pattern.spin.Instance;
 
 public class InstanceTest {
 

@@ -1,4 +1,4 @@
-package fm.pattern.cycle.junit;
+package fm.pattern.spin.junit;
 
 public final class TestExecutionMonitor {
 

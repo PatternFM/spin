@@ -1,4 +1,4 @@
-package fm.pattern.cycle.junit;
+package fm.pattern.spin.junit;
 
 import org.junit.runner.Result;
 import org.junit.runner.notification.RunListener;

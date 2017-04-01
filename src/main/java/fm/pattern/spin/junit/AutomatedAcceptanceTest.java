@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package fm.pattern.cycle.junit;
+package fm.pattern.spin.junit;
 
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
-import fm.pattern.cycle.RuntimeEnvironment;
-import fm.pattern.cycle.config.CycleConfiguration;
+import fm.pattern.spin.RuntimeEnvironment;
+import fm.pattern.spin.config.SpinConfiguration;
 
 @RunWith(AcceptanceTestRunner.class)
 public abstract class AutomatedAcceptanceTest {
 
     @BeforeClass
     public static void start() {
-        RuntimeEnvironment.start(CycleConfiguration.getInstances(), CycleConfiguration.getTimeout());
+        RuntimeEnvironment.start(SpinConfiguration.getInstances(), SpinConfiguration.getTimeout());
     }
 
     public static void stop() {
-        RuntimeEnvironment.stop(CycleConfiguration.getInstances());
+        RuntimeEnvironment.stop(SpinConfiguration.getInstances());
     }
 
 }
