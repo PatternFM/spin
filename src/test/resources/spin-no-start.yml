@@ -1,0 +1,3 @@
+Test Service 2: 
+  stop: test-path-2/start-service.bat
+  ping: http://localhost:9090/v1/ping  

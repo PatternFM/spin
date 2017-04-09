@@ -28,7 +28,7 @@ public class InstanceManagementServiceTest {
     }
 
     @Test(expected = SpinConfigurationException.class)
-    public void shouldThrowAnExceptionWhenTheStartScriptCannotBeFound() {
+    public void shouldThrowAnExceptionWhenTheStartScriptDirectoryIsInvalid() {
         instance.setStart("invalid/path/test-start.sh");
         InstanceManagementService.start(instance);
     }
@@ -49,6 +49,12 @@ public class InstanceManagementServiceTest {
     public void shouldBeAbleToExecuteAStopScriptWhenTheStopScriptIsPresentAndReturnsAnExitCodeOfZero() {
         instance.setStop("test-stop.sh");
         InstanceManagementService.stop(instance);
+    }
+
+    @Test(expected = SpinConfigurationException.class)
+    public void shouldThrowAnExceptionWhenTheStopScriptDirectoryIsInvalid() {
+        instance.setStop("invalid/path/test-stop.sh");
+        InstanceManagementService.start(instance);
     }
 
     @Test(expected = SpinConfigurationException.class)

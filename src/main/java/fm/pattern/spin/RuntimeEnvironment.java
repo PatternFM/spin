@@ -17,18 +17,24 @@
 package fm.pattern.spin;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import fm.pattern.spin.config.SpinConfiguration;
 
 public final class RuntimeEnvironment {
 
+    private static ExecutorService executor = Executors.newCachedThreadPool();
+
     private RuntimeEnvironment() {
 
     }
 
     public static void start(List<Instance> instances, Timeout timeout) {
-        instances.forEach(instance -> instance.start());
+        instances.forEach(instance -> executor.submit(() -> {
+            instance.start();
+        }));
 
         Integer count = 0;
 

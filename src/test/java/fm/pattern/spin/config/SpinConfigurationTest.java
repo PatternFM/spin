@@ -23,7 +23,7 @@ public class SpinConfigurationTest {
     }
 
     @Test
-    public void shouldBeAbleToLoadInstancesFromTheDefaultCycleConfigurationFile() {
+    public void shouldBeAbleToLoadInstancesFromTheDefaultSpinConfigurationFile() {
         SpinConfiguration.load("spin.yml");
 
         List<Instance> instances = SpinConfiguration.getInstances();
@@ -69,7 +69,7 @@ public class SpinConfigurationTest {
     }
 
     @Test
-    public void shouldBeAbleToLoadInstancesFromTheCycleConfigSystemProperty() {
+    public void shouldBeAbleToLoadInstancesFromTheSpinConfigSystemProperty() {
         SpinConfiguration.load("spin-ci.yml");
 
         List<Instance> instances = SpinConfiguration.getInstances();
@@ -89,22 +89,28 @@ public class SpinConfigurationTest {
     }
 
     @Test(expected = SpinConfigurationException.class)
-    public void shouldThrowACycleConfigurationExceptionIfTheConfigurationFileCannotBeParsed() {
+    public void shouldThrowASpinConfigurationExceptionIfTheConfigurationFileCannotBeParsed() {
         SpinConfiguration.load("spin-invalid.yml");
     }
 
     @Test(expected = SpinConfigurationException.class)
-    public void shouldThrowACycleConfigurationExceptionIfAServiceDoesNotContainAPingAttribute() {
-        SpinConfiguration.load("spin-missing-ping.yml");
+    public void shouldThrowASpinConfigurationExceptionIfAServiceIsMissingTheStartAttribute() {
+        SpinConfiguration.load("spin-no-start.yml");
         SpinConfiguration.getInstances();
     }
-
+    
     @Test(expected = SpinConfigurationException.class)
-    public void shouldThrowACycleConfigurationExceptionIfAServiceDoesNotContainAPathAttribute() {
-        SpinConfiguration.load("spin-missing-path.yml");
+    public void shouldThrowASpinConfigurationExceptionIfAServiceIsMissingTheStopAttribute() {
+        SpinConfiguration.load("spin-no-stop.yml");
         SpinConfiguration.getInstances();
     }
-
+    
+    @Test(expected = SpinConfigurationException.class)
+    public void shouldThrowASpinConfigurationExceptionIfAServiceIsMissingThePingAttribute() {
+        SpinConfiguration.load("spin-no-ping.yml");
+        SpinConfiguration.getInstances();
+    }
+    
     @Test
     public void shouldProduceAnEmptyInstanceConfigurationWhenTheConfigurationFileToLoadCannotBeFound() {
         SpinConfiguration.load("spin-missing.yml");

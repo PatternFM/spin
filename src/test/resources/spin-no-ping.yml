@@ -1,0 +1,3 @@
+Test Service 2: 
+  start: test-path-2/start-service.bat
+  stop: test-path-2/stop-service.bat  
