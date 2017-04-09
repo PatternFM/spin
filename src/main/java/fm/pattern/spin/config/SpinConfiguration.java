@@ -51,7 +51,7 @@ public final class SpinConfiguration {
     }
 
     static void reset() {
-        System.clearProperty("cycle.config");
+        System.clearProperty("spin.config");
         instances = null;
         timeout = null;
     }
@@ -63,17 +63,17 @@ public final class SpinConfiguration {
             return;
         }
 
+        Map<String, Map<String, Object>> model = null;
         try {
             log.info("Using Spin configuration file: " + filename);
-
-            Map<String, Map<String, Object>> model = (Map<String, Map<String, Object>>) new Yaml().load(inputStream);
-            timeout = resolveTimeout(model);
-            instances = resolveInstances(model);
+            model = (Map<String, Map<String, Object>>) new Yaml().load(inputStream);
         }
         catch (Exception e) {
             throw new SpinConfigurationException("Spin failed to parse file '" + filename + "'", e);
         }
 
+        timeout = resolveTimeout(model);
+        instances = resolveInstances(model);
     }
 
     public static List<Instance> getInstances() {
@@ -89,27 +89,28 @@ public final class SpinConfiguration {
 
         for (Map.Entry<String, Map<String, Object>> entry : model.entrySet()) {
             String name = entry.getKey();
-
             if (name.equals("startup")) {
                 continue;
             }
 
             Map<String, Object> map = entry.getValue();
-            String path = (String) map.get("path");
+
+            String start = (String) map.get("start");
+            if (StringUtils.isEmpty(start)) {
+                throw new SpinConfigurationException("Invalid Spin configuration - 'start' is required attribute for " + name);
+            }
+
+            String stop = (String) map.get("stop");
+            if (StringUtils.isEmpty(stop)) {
+                throw new SpinConfigurationException("Invalid Spin configuration - 'stop' is required attribute for " + name);
+            }
+
             String ping = (String) map.get("ping");
-
-            if (StringUtils.isEmpty(path) || StringUtils.isBlank(ping)) {
-                throw new SpinConfigurationException("Invalid Spin configuration - 'path' and 'ping' are required attributes for " + name);
+            if (StringUtils.isBlank(ping)) {
+                throw new SpinConfigurationException("Invalid Spin configuration - 'ping' is a required attribute for " + name);
             }
 
-            Instance instance = new Instance(name, path, ping);
-
-            if (map.containsKey("start")) {
-                instance.setStart((String) map.get("start"));
-            }
-            if (map.containsKey("stop")) {
-                instance.setStop((String) map.get("stop"));
-            }
+            Instance instance = new Instance(name, start, stop, ping);
 
             Map<String, String> environment = (Map<String, String>) map.get("environment");
             if (environment != null && !environment.isEmpty()) {

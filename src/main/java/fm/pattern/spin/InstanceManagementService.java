@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -13,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+
+import fm.pattern.spin.config.SpinConfigurationException;
 
 public final class InstanceManagementService {
 
@@ -23,8 +27,27 @@ public final class InstanceManagementService {
     }
 
     public static void start(Instance instance) {
-        String directory = resolveTargetDirectory(instance.getPath());
-        String script = directory + instance.getStart();
+        String relativePath = null;
+        String filename = null;
+
+        if (instance.getStart().lastIndexOf(File.separator) == -1) {
+            relativePath = "";
+            filename = instance.getStart();
+        }
+        else {
+            relativePath = instance.getStart().substring(0, instance.getStart().lastIndexOf(File.separator) + 1);
+            filename = instance.getStart().substring(instance.getStart().lastIndexOf(File.separator) + 1, instance.getStart().length());
+        }
+
+        String directory = resolveTargetDirectory(relativePath);
+        String script = directory + filename;
+
+        if (!Files.exists(Paths.get(directory))) {
+            throw new SpinConfigurationException("Unable to find start script '" + script + "' - the specified directory does not exist.");
+        }
+        if (!Files.exists(Paths.get(script))) {
+            throw new SpinConfigurationException("Unable to find start script '" + script + "' - the directory is valid, but the filename '" + filename + "' could not be found.");
+        }
 
         log.info("Starting " + instance.getName());
         log.info("Using start script: " + script);
@@ -33,8 +56,27 @@ public final class InstanceManagementService {
     }
 
     public static void stop(Instance instance) {
-        String directory = resolveTargetDirectory(instance.getPath());
-        String script = directory + instance.getStop();
+        String relativePath = null;
+        String filename = null;
+
+        if (instance.getStop().lastIndexOf(File.separator) == -1) {
+            relativePath = "";
+            filename = instance.getStop();
+        }
+        else {
+            relativePath = instance.getStop().substring(0, instance.getStop().lastIndexOf(File.separator) + 1);
+            filename = instance.getStop().substring(instance.getStop().lastIndexOf(File.separator) + 1, instance.getStop().length());
+        }
+
+        String directory = resolveTargetDirectory(relativePath);
+        String script = directory + filename;
+
+        if (!Files.exists(Paths.get(directory))) {
+            throw new SpinConfigurationException("Unable to find stop script '" + script + "' - the specified directory does not exist.");
+        }
+        if (!Files.exists(Paths.get(script))) {
+            throw new SpinConfigurationException("Unable to find stop script '" + script + "' - the directory is valid, but the filename '" + filename + "' could not be found.");
+        }
 
         log.info("Stopping " + instance.getName());
         log.info("Using stop script: " + script);
@@ -71,14 +113,14 @@ public final class InstanceManagementService {
             process.destroy();
 
             if (exitValue != 0 && exitValue != 7) {
-                String message = "Script '" + script + "'completed with exit code: " + exitValue;
+                String message = "Script '" + script + "' completed with exit code: " + exitValue;
                 log.error(message);
-                throw new InstanceManagementException(message);
+                throw new ScriptExecutionException(message);
             }
         }
         catch (Exception e) {
             log.error("Failed to execute script:", e);
-            throw new InstanceManagementException("Failed to execute script: ", e);
+            throw new ScriptExecutionException("Failed to execute script: ", e);
         }
     }
 

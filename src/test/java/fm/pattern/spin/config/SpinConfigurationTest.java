@@ -31,10 +31,9 @@ public class SpinConfigurationTest {
 
         Instance first = instances.get(0);
         assertThat(first.getName()).isEqualTo("Test Service 1");
-        assertThat(first.getPath()).isEqualTo("test-path-1");
         assertThat(first.getPing()).isEqualTo("http://localhost:8080/v1/ping");
-        assertThat(first.getStart()).isEqualTo("start.sh");
-        assertThat(first.getStop()).isEqualTo("stop.sh");
+        assertThat(first.getStart()).isEqualTo("test-path-1/start.sh");
+        assertThat(first.getStop()).isEqualTo("test-path-1/stop.sh");
 
         Map<String, String> environment = first.getEnvironment();
         assertThat(environment).hasSize(2);
@@ -46,10 +45,9 @@ public class SpinConfigurationTest {
 
         Instance second = instances.get(1);
         assertThat(second.getName()).isEqualTo("Test Service 2");
-        assertThat(second.getPath()).isEqualTo("test-path-2");
         assertThat(second.getPing()).isEqualTo("http://localhost:9090/v1/ping");
-        assertThat(second.getStart()).isEqualTo("start-service.bat");
-        assertThat(second.getStop()).isEqualTo("stop-service.bat");
+        assertThat(second.getStart()).isEqualTo("test-path-2/start-service.bat");
+        assertThat(second.getStop()).isEqualTo("test-path-2/stop-service.bat");
     }
 
     @Test
@@ -79,17 +77,15 @@ public class SpinConfigurationTest {
 
         Instance first = instances.get(0);
         assertThat(first.getName()).isEqualTo("Test Service 1");
-        assertThat(first.getPath()).isEqualTo("test-path-1/extended");
         assertThat(first.getPing()).isEqualTo("http://api.ms1.com/v1/ping");
-        assertThat(first.getStart()).isEqualTo("start.sh");
-        assertThat(first.getStop()).isEqualTo("stop.sh");
+        assertThat(first.getStart()).isEqualTo("test-path-1/extended/start.sh");
+        assertThat(first.getStop()).isEqualTo("test-path-1/extended/stop.sh");
 
         Instance second = instances.get(1);
         assertThat(second.getName()).isEqualTo("Test Service 2");
-        assertThat(second.getPath()).isEqualTo("test-path-2/extended");
         assertThat(second.getPing()).isEqualTo("http://api.ms2.com/v1/ping");
-        assertThat(second.getStart()).isEqualTo("start-service.bat");
-        assertThat(second.getStop()).isEqualTo("stop-service.bat");
+        assertThat(second.getStart()).isEqualTo("test-path-2/extended/start-service.bat");
+        assertThat(second.getStop()).isEqualTo("test-path-2/extended/stop-service.bat");
     }
 
     @Test(expected = SpinConfigurationException.class)

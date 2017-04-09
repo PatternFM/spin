@@ -7,9 +7,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 
-import fm.pattern.spin.Instance;
-import fm.pattern.spin.InstanceManagementException;
-import fm.pattern.spin.InstanceManagementService;
+import fm.pattern.spin.config.SpinConfigurationException;
 
 public class InstanceManagementServiceTest {
 
@@ -17,7 +15,7 @@ public class InstanceManagementServiceTest {
 
     @Before
     public void before() {
-        this.instance = new Instance("name", ".", "http://localhost:8080/v1/ping");
+        this.instance = new Instance("name", "start.sh", "stop.sh", "http://localhost:8080/v1/ping");
         Map<String, String> environment = new HashMap<>();
         environment.put("key", "value");
         instance.setEnvironment(environment);
@@ -29,14 +27,20 @@ public class InstanceManagementServiceTest {
         InstanceManagementService.start(instance);
     }
 
-    @Test(expected = InstanceManagementException.class)
+    @Test(expected = SpinConfigurationException.class)
+    public void shouldThrowAnExceptionWhenTheStartScriptCannotBeFound() {
+        instance.setStart("invalid/path/test-start.sh");
+        InstanceManagementService.start(instance);
+    }
+
+    @Test(expected = ScriptExecutionException.class)
     public void shouldNotBeAbleToExecuteAStartScriptWhenTheStartScriptIsPresentButReturnsANonZeroExitCode() {
         instance.setStart("start-with-errors.sh");
         InstanceManagementService.start(instance);
     }
 
-    @Test(expected = InstanceManagementException.class)
-    public void shouldNotBeAbleToExecuteAStartScriptWhenTheStartScriptIsNotPresent() {
+    @Test(expected = SpinConfigurationException.class)
+    public void shouldNotBeAbleToExecuteAStartScriptWhenTheStartScriptCannotBeFound() {
         this.instance.setStart("not_a_real_start_script.sh");
         InstanceManagementService.start(instance);
     }
@@ -47,15 +51,15 @@ public class InstanceManagementServiceTest {
         InstanceManagementService.stop(instance);
     }
 
-    @Test(expected = InstanceManagementException.class)
-    public void shouldNotBeAbleToExecuteAStopScriptWhenTheStartScriptIsNotPresent() {
+    @Test(expected = SpinConfigurationException.class)
+    public void shouldNotBeAbleToExecuteAStopScriptWhenTheStartScriptCannotBeFound() {
         this.instance.setStart("not_a_real_stop_script.sh");
         InstanceManagementService.stop(instance);
     }
 
-    @Test(expected = InstanceManagementException.class)
+    @Test(expected = ScriptExecutionException.class)
     public void shouldNotBeAbleToExecuteAStopScriptWhenTheStopScriptIsPresentButReturnsANonZeroExitCode() {
-        instance.setStart("stop-with-errors.sh");
+        instance.setStop("stop-with-errors.sh");
         InstanceManagementService.stop(instance);
     }
 
@@ -63,7 +67,7 @@ public class InstanceManagementServiceTest {
     public void shouldReturnFalseWhenTheInstanceIsNotRunning() {
         Assertions.assertThat(InstanceManagementService.isRunning(instance)).isFalse();
     }
-    
+
     @Test
     public void theClassShouldBeAWellDefinedUtilityClass() {
         PatternAssertions.assertClass(InstanceManagementService.class).isAWellDefinedUtilityClass();

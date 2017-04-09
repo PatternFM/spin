@@ -3,11 +3,11 @@ startup:
   retry_count: 10
  
 Test Service 1: 
-  path: test-path-1/extended
+  start: test-path-1/extended/start.sh
+  stop: test-path-1/extended/stop.sh
   ping: http://api.ms1.com/v1/ping
   
 Test Service 2: 
-  path: test-path-2/extended
+  start: test-path-2/extended/start-service.bat
+  stop: test-path-2/extended/stop-service.bat
   ping: http://api.ms2.com/v1/ping  
-  start: start-service.bat
-  stop: stop-service.bat

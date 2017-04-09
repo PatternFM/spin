@@ -1,12 +1,12 @@
 Test Service 1: 
-  path: test-path-1
+  start: test-path-1/start.sh
+  stop: test-path-1/stop.sh
   ping: http://localhost:8080/v1/ping
   environment:
     key1: value1
     key2: value2
   
 Test Service 2: 
-  path: test-path-2
+  start: test-path-2/start-service.bat
+  stop: test-path-2/stop-service.bat
   ping: http://localhost:9090/v1/ping  
-  start: start-service.bat
-  stop: stop-service.bat

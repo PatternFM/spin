@@ -22,19 +22,18 @@ import java.util.Map;
 public class Instance {
 
     private String name;
-    private String path;
+    private String start;
+    private String stop;
     private String ping;
-
-    private String start = "start.sh";
-    private String stop = "stop.sh";
 
     private Map<String, String> environment = new HashMap<>();
 
     private boolean shouldTerminate = false;
 
-    public Instance(String name, String path, String ping) {
+    public Instance(String name, String start, String stop, String ping) {
         this.name = name;
-        this.path = path;
+        this.start = start;
+        this.stop = stop;
         this.ping = ping;
     }
 
@@ -44,14 +43,6 @@ public class Instance {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public String getPing() {
