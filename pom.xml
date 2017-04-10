@@ -5,7 +5,7 @@
 
    <groupId>fm.pattern</groupId>
    <artifactId>spin</artifactId>
-   <version>1.0.1</version>
+   <version>1.0.2-SNAPSHOT</version>
    <modelVersion>4.0.0</modelVersion>
    <packaging>jar</packaging>
 
@@ -19,7 +19,7 @@
    <scm>
       <developerConnection>scm:git:https://github.com/PatternFM/spin.git</developerConnection>
       <url>scm:git:https://github.com/PatternFM/spin.git</url>
-      <tag>spin-1.0.1</tag>
+      <tag>HEAD</tag>
    </scm>
 
    <licenses>
