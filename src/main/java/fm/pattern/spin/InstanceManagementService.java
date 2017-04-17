@@ -58,16 +58,18 @@ public final class InstanceManagementService {
     }
 
     public static void stop(Instance instance) {
+        String stopScript = instance.getStop();
+
         String relativePath = null;
         String filename = null;
 
-        if (instance.getStop().lastIndexOf(File.separator) == -1) {
+        if (stopScript.lastIndexOf(File.separator) == -1) {
             relativePath = "";
             filename = instance.getStop();
         }
         else {
-            relativePath = instance.getStop().substring(0, instance.getStop().lastIndexOf(File.separator) + 1);
-            filename = instance.getStop().substring(instance.getStop().lastIndexOf(File.separator) + 1, instance.getStop().length());
+            relativePath = stopScript.substring(0, stopScript.lastIndexOf(File.separator) + 1);
+            filename = instance.getStop().substring(stopScript.lastIndexOf(File.separator) + 1, stopScript.length());
         }
 
         String directory = resolveTargetDirectory(relativePath);
