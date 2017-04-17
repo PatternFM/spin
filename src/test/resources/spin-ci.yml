@@ -1,6 +1,7 @@
 startup:
   polling_interval: 5000
   retry_count: 10
+  concurrent: false
  
 Test Service 1: 
   start: test-path-1/extended/start.sh

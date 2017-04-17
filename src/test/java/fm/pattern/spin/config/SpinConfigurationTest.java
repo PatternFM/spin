@@ -62,9 +62,10 @@ public class SpinConfigurationTest {
     public void shouldBeAbleToOverrideDefaultTimeoutSettingsThroughConfiguration() {
         SpinConfiguration.load("spin-ci.yml");
 
-        StartupConfiguration timeout = SpinConfiguration.getStartupConfiguration();
-        assertThat(timeout.getPollingInterval()).isEqualTo(5000);
-        assertThat(timeout.getRetryCount()).isEqualTo(10);
+        StartupConfiguration startupConfiguration = SpinConfiguration.getStartupConfiguration();
+        assertThat(startupConfiguration.getPollingInterval()).isEqualTo(5000);
+        assertThat(startupConfiguration.getRetryCount()).isEqualTo(10);
+        assertThat(startupConfiguration.isConcurrent()).isFalse();
     }
 
     @Test
