@@ -61,7 +61,7 @@ public class RuntimeEnvironmentTest {
 
         environment.start(instances, startupConfiguration);
 
-        verify(executor, Mockito.times(2)).submit(Mockito.anyObject());
+        verify(executor, Mockito.times(2)).submit((Runnable) Mockito.anyObject());
     }
 
     @Test
