@@ -4,6 +4,7 @@ import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
@@ -11,11 +12,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-
-import fm.pattern.spin.Instance;
-import fm.pattern.spin.RuntimeEnvironment;
-import fm.pattern.spin.StartupConfiguration;
-import fm.pattern.spin.TimeoutException;
 
 public class RuntimeEnvironmentTest {
 
@@ -25,38 +21,57 @@ public class RuntimeEnvironmentTest {
     @Mock
     private Instance instance2;
 
-    private StartupConfiguration timeout;
+    @Mock
+    private ExecutorService executor;
 
+    private StartupConfiguration startupConfiguration;
     private List<Instance> instances = new ArrayList<>();
+
+    private RuntimeEnvironment environment;
 
     @Before
     public void before() {
         MockitoAnnotations.initMocks(this);
-        this.instances.add(instance1);
-        this.instances.add(instance2);
+        instances.add(instance1);
+        instances.add(instance2);
 
-        this.timeout = new StartupConfiguration();
-        this.timeout.setPollingInterval(100);
-        this.timeout.setRetryCount(10);
+        startupConfiguration = new StartupConfiguration();
+        startupConfiguration.setPollingInterval(100);
+        startupConfiguration.setRetryCount(10);
+        startupConfiguration.setConcurrent(true);
+
+        environment = new RuntimeEnvironment(executor);
     }
 
     @Test(expected = TimeoutException.class)
     public void shouldThrowATimeoutExceptionIfAllInstancesDoNotStartWithinTheAllottedTime() {
-        RuntimeEnvironment.start(instances, timeout);
+        environment.start(instances, startupConfiguration);
     }
 
     @Test(expected = TimeoutException.class)
     public void shouldThrowATimeoutExceptionIfSomeInstancesDoNotStartWithinTheAllottedTime() {
         Mockito.when(instance1.running()).thenReturn(true);
-        RuntimeEnvironment.start(instances, timeout);
+        environment.start(instances, startupConfiguration);
     }
 
     @Test
-    public void shouldBeAbleToStartAllInstancesSuccessfully() {
+    public void shouldBeAbleToStartAllInstancesConcurrently() {
         Mockito.when(instance1.running()).thenReturn(true);
         Mockito.when(instance2.running()).thenReturn(true);
 
-        RuntimeEnvironment.start(instances, timeout);
+        environment.start(instances, startupConfiguration);
+
+        verify(executor, Mockito.times(2)).submit(Mockito.anyObject());
+    }
+
+    @Test
+    public void shouldBeAbleToStartAllInstancesSerially() {
+        startupConfiguration.setConcurrent(false);
+
+        Mockito.when(instance1.running()).thenReturn(true);
+        Mockito.when(instance2.running()).thenReturn(true);
+
+        environment.start(instances, startupConfiguration);
 
         verify(instance1, Mockito.times(1)).start();
         verify(instance2, Mockito.times(1)).start();
@@ -67,7 +82,7 @@ public class RuntimeEnvironmentTest {
         Mockito.when(instance1.running()).thenReturn(true);
         Mockito.when(instance2.running()).thenReturn(true);
 
-        RuntimeEnvironment.stop(instances);
+        environment.stop(instances);
 
         verify(instance1, Mockito.times(1)).stop();
         verify(instance2, Mockito.times(1)).stop();
@@ -78,7 +93,7 @@ public class RuntimeEnvironmentTest {
         Mockito.when(instance1.running()).thenReturn(true);
         Mockito.when(instance2.running()).thenReturn(true);
 
-        Assertions.assertThat(RuntimeEnvironment.running(instances)).isTrue();
+        Assertions.assertThat(environment.running(instances)).isTrue();
     }
 
     @Test
@@ -86,12 +101,7 @@ public class RuntimeEnvironmentTest {
         Mockito.when(instance1.running()).thenReturn(true);
         Mockito.when(instance2.running()).thenReturn(false);
 
-        Assertions.assertThat(RuntimeEnvironment.running(instances)).isFalse();
-    }
-
-    @Test
-    public void theClassShouldBeAWellDefinedUtilityClass() {
-        PatternAssertions.assertClass(RuntimeEnvironment.class).isAWellDefinedUtilityClass();
+        Assertions.assertThat(environment.running(instances)).isFalse();
     }
 
 }

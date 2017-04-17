@@ -18,45 +18,54 @@ package fm.pattern.spin;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import fm.pattern.spin.config.SpinConfiguration;
 
 public final class RuntimeEnvironment {
 
-    private static ExecutorService executor = Executors.newCachedThreadPool();
+    private final ExecutorService executor;
 
-    private RuntimeEnvironment() {
-
+    public RuntimeEnvironment(ExecutorService executor) {
+        this.executor = executor;
     }
 
-    public static void start(List<Instance> instances, StartupConfiguration timeout) {
-        instances.forEach(instance -> executor.submit(() -> {
-            instance.start();
-        }));
+    public void start(List<Instance> instances, StartupConfiguration startupConfiguration) {
+        startInstances(instances, startupConfiguration);
 
         Integer count = 0;
 
         while (!running(instances)) {
-            if (count > timeout.getRetryCount()) {
+            if (count > startupConfiguration.getRetryCount()) {
                 String names = instances.stream().map(i -> i.getName()).collect(Collectors.joining(","));
                 throw new TimeoutException("Timeout occurred while waiting for " + names + " to start up. Timeout configuration: " + SpinConfiguration.getStartupConfiguration());
             }
-            pause(timeout.getPollingInterval());
+            pause(startupConfiguration.getPollingInterval());
             count++;
         }
     }
 
-    public static void stop(List<Instance> instances) {
+    public void stop(List<Instance> instances) {
         instances.forEach(instance -> instance.stop());
+        executor.shutdown();
     }
 
-    public static boolean running(List<Instance> instances) {
+    public boolean running(List<Instance> instances) {
         return instances.stream().filter(instance -> !instance.running()).count() == 0;
     }
 
-    private static void pause(Integer milliseconds) {
+    private void startInstances(List<Instance> instances, StartupConfiguration startupConfiguration) {
+        if (startupConfiguration.isConcurrent()) {
+            instances.forEach(instance -> executor.submit(() -> {
+                instance.start();
+            }));
+        }
+        else {
+            instances.forEach(instance -> instance.start());
+        }
+    }
+
+    private void pause(Integer milliseconds) {
         try {
             Thread.sleep(milliseconds);
         }

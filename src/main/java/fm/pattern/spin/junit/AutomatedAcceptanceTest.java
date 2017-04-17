@@ -16,6 +16,8 @@
 
 package fm.pattern.spin.junit;
 
+import java.util.concurrent.Executors;
+
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
@@ -25,13 +27,15 @@ import fm.pattern.spin.config.SpinConfiguration;
 @RunWith(AcceptanceTestRunner.class)
 public abstract class AutomatedAcceptanceTest {
 
+    private static RuntimeEnvironment environment = new RuntimeEnvironment(Executors.newCachedThreadPool());
+
     @BeforeClass
     public static void start() {
-        RuntimeEnvironment.start(SpinConfiguration.getInstances(), SpinConfiguration.getStartupConfiguration());
+        environment.start(SpinConfiguration.getInstances(), SpinConfiguration.getStartupConfiguration());
     }
 
     public static void stop() {
-        RuntimeEnvironment.stop(SpinConfiguration.getInstances());
+        environment.stop(SpinConfiguration.getInstances());
     }
 
 }
