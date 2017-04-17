@@ -31,7 +31,7 @@ public final class RuntimeEnvironment {
 
     }
 
-    public static void start(List<Instance> instances, Timeout timeout) {
+    public static void start(List<Instance> instances, StartupConfiguration timeout) {
         instances.forEach(instance -> executor.submit(() -> {
             instance.start();
         }));
@@ -41,7 +41,7 @@ public final class RuntimeEnvironment {
         while (!running(instances)) {
             if (count > timeout.getRetryCount()) {
                 String names = instances.stream().map(i -> i.getName()).collect(Collectors.joining(","));
-                throw new TimeoutException("Timeout occurred while waiting for " + names + " to start up. Timeout configuration: " + SpinConfiguration.getTimeout());
+                throw new TimeoutException("Timeout occurred while waiting for " + names + " to start up. Timeout configuration: " + SpinConfiguration.getStartupConfiguration());
             }
             pause(timeout.getPollingInterval());
             count++;

@@ -19,18 +19,20 @@ package fm.pattern.spin;
 import fm.pattern.minimal.JSON;
 import fm.pattern.spin.config.SpinConfiguration;
 
-public class Timeout {
+public class StartupConfiguration {
 
     private Integer pollingInterval;
     private Integer retryCount;
+    private boolean concurrent;
 
-    public Timeout() {
+    public StartupConfiguration() {
 
     }
 
-    public Timeout(Integer pollingInterval, Integer retryCount) {
+    public StartupConfiguration(Integer pollingInterval, Integer retryCount, boolean concurrent) {
         this.pollingInterval = pollingInterval;
         this.retryCount = retryCount;
+        this.concurrent = concurrent;
     }
 
     public Integer getPollingInterval() {
@@ -47,6 +49,14 @@ public class Timeout {
 
     public void setRetryCount(Integer retryCount) {
         this.retryCount = retryCount;
+    }
+
+    public boolean isConcurrent() {
+        return concurrent;
+    }
+
+    public void setConcurrent(boolean concurrent) {
+        this.concurrent = concurrent;
     }
 
     @Override

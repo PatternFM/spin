@@ -27,7 +27,7 @@ public abstract class AutomatedAcceptanceTest {
 
     @BeforeClass
     public static void start() {
-        RuntimeEnvironment.start(SpinConfiguration.getInstances(), SpinConfiguration.getTimeout());
+        RuntimeEnvironment.start(SpinConfiguration.getInstances(), SpinConfiguration.getStartupConfiguration());
     }
 
     public static void stop() {

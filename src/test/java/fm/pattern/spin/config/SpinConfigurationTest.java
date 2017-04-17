@@ -11,9 +11,7 @@ import org.junit.Test;
 
 import fm.pattern.spin.Instance;
 import fm.pattern.spin.PatternAssertions;
-import fm.pattern.spin.Timeout;
-import fm.pattern.spin.config.SpinConfiguration;
-import fm.pattern.spin.config.SpinConfigurationException;
+import fm.pattern.spin.StartupConfiguration;
 
 public class SpinConfigurationTest {
 
@@ -54,16 +52,17 @@ public class SpinConfigurationTest {
     public void shouldBeAbleToProduceDefaultTimeoutSettingsIfTheSettingsAreNotProvided() {
         SpinConfiguration.load("spin.yml");
 
-        Timeout timeout = SpinConfiguration.getTimeout();
-        assertThat(timeout.getPollingInterval()).isEqualTo(SpinConfiguration.DEFAULT_POLLING_INTERVAL_MILLIS);
-        assertThat(timeout.getRetryCount()).isEqualTo(SpinConfiguration.DEFAULT_RETRY_COUNT);
+        StartupConfiguration startupConfiguration = SpinConfiguration.getStartupConfiguration();
+        assertThat(startupConfiguration.getPollingInterval()).isEqualTo(SpinConfiguration.DEFAULT_POLLING_INTERVAL_MILLIS);
+        assertThat(startupConfiguration.getRetryCount()).isEqualTo(SpinConfiguration.DEFAULT_RETRY_COUNT);
+        assertThat(startupConfiguration.isConcurrent()).isEqualTo(SpinConfiguration.DEFAULT_CONCURRENT);
     }
 
     @Test
     public void shouldBeAbleToOverrideDefaultTimeoutSettingsThroughConfiguration() {
         SpinConfiguration.load("spin-ci.yml");
 
-        Timeout timeout = SpinConfiguration.getTimeout();
+        StartupConfiguration timeout = SpinConfiguration.getStartupConfiguration();
         assertThat(timeout.getPollingInterval()).isEqualTo(5000);
         assertThat(timeout.getRetryCount()).isEqualTo(10);
     }
@@ -98,24 +97,24 @@ public class SpinConfigurationTest {
         SpinConfiguration.load("spin-no-start.yml");
         SpinConfiguration.getInstances();
     }
-    
+
     @Test(expected = SpinConfigurationException.class)
     public void shouldThrowASpinConfigurationExceptionIfAServiceIsMissingTheStopAttribute() {
         SpinConfiguration.load("spin-no-stop.yml");
         SpinConfiguration.getInstances();
     }
-    
+
     @Test(expected = SpinConfigurationException.class)
     public void shouldThrowASpinConfigurationExceptionIfAServiceIsMissingThePingAttribute() {
         SpinConfiguration.load("spin-no-ping.yml");
         SpinConfiguration.getInstances();
     }
-    
+
     @Test
     public void shouldProduceAnEmptyInstanceConfigurationWhenTheConfigurationFileToLoadCannotBeFound() {
         SpinConfiguration.load("spin-missing.yml");
 
-        Timeout timeout = SpinConfiguration.getTimeout();
+        StartupConfiguration timeout = SpinConfiguration.getStartupConfiguration();
         assertThat(timeout.getPollingInterval()).isEqualTo(SpinConfiguration.DEFAULT_POLLING_INTERVAL_MILLIS);
         assertThat(timeout.getRetryCount()).isEqualTo(SpinConfiguration.DEFAULT_RETRY_COUNT);
 

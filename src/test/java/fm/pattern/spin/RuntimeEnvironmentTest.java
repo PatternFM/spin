@@ -14,7 +14,7 @@ import org.mockito.MockitoAnnotations;
 
 import fm.pattern.spin.Instance;
 import fm.pattern.spin.RuntimeEnvironment;
-import fm.pattern.spin.Timeout;
+import fm.pattern.spin.StartupConfiguration;
 import fm.pattern.spin.TimeoutException;
 
 public class RuntimeEnvironmentTest {
@@ -25,7 +25,7 @@ public class RuntimeEnvironmentTest {
     @Mock
     private Instance instance2;
 
-    private Timeout timeout;
+    private StartupConfiguration timeout;
 
     private List<Instance> instances = new ArrayList<>();
 
@@ -35,7 +35,7 @@ public class RuntimeEnvironmentTest {
         this.instances.add(instance1);
         this.instances.add(instance2);
 
-        this.timeout = new Timeout();
+        this.timeout = new StartupConfiguration();
         this.timeout.setPollingInterval(100);
         this.timeout.setRetryCount(10);
     }

@@ -27,16 +27,18 @@ public final class InstanceManagementService {
     }
 
     public static void start(Instance instance) {
+        String startScript = instance.getStart();
+
         String relativePath = null;
         String filename = null;
 
-        if (instance.getStart().lastIndexOf(File.separator) == -1) {
+        if (startScript.lastIndexOf(File.separator) == -1) {
             relativePath = "";
             filename = instance.getStart();
         }
         else {
-            relativePath = instance.getStart().substring(0, instance.getStart().lastIndexOf(File.separator) + 1);
-            filename = instance.getStart().substring(instance.getStart().lastIndexOf(File.separator) + 1, instance.getStart().length());
+            relativePath = startScript.substring(0, startScript.lastIndexOf(File.separator) + 1);
+            filename = startScript.substring(startScript.lastIndexOf(File.separator) + 1, instance.getStart().length());
         }
 
         String directory = resolveTargetDirectory(relativePath);
@@ -99,6 +101,7 @@ public final class InstanceManagementService {
             ProcessBuilder builder = new ProcessBuilder("/bin/sh", script);
             builder.directory(new File(directory));
             builder.redirectErrorStream(true);
+
             configureEnvironment(builder, environment);
 
             Process process = builder.start();
@@ -110,7 +113,9 @@ public final class InstanceManagementService {
             }
 
             Integer exitValue = process.waitFor();
+
             process.destroy();
+            reader.close();
 
             if (exitValue != 0 && exitValue != 7) {
                 String message = "Script '" + script + "' completed with exit code: " + exitValue;

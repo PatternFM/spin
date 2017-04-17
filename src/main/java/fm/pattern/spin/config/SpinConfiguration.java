@@ -27,19 +27,20 @@ import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import fm.pattern.spin.Instance;
-import fm.pattern.spin.Timeout;
+import fm.pattern.spin.StartupConfiguration;
 
 @SuppressWarnings("unchecked")
 public final class SpinConfiguration {
 
     public static final Integer DEFAULT_RETRY_COUNT = 60;
     public static final Integer DEFAULT_POLLING_INTERVAL_MILLIS = 1000;
-
-    private static final Logger log = LoggerFactory.getLogger(SpinConfiguration.class);
-    private static final String default_filename = "spin.yml";
+    public static final String DEFAULT_FILENAME = "spin.yml";
+    public static final boolean DEFAULT_CONCURRENT = true;
 
     private static List<Instance> instances = null;
-    private static Timeout timeout = null;
+    private static StartupConfiguration startupConfiguration = null;
+
+    private static final Logger log = LoggerFactory.getLogger(SpinConfiguration.class);
 
     private SpinConfiguration() {
 
@@ -47,13 +48,13 @@ public final class SpinConfiguration {
 
     static {
         String filename = System.getProperty("spin.config");
-        load(StringUtils.isNotBlank(filename) ? filename : default_filename);
+        load(StringUtils.isNotBlank(filename) ? filename : DEFAULT_FILENAME);
     }
 
     static void reset() {
         System.clearProperty("spin.config");
         instances = null;
-        timeout = null;
+        startupConfiguration = null;
     }
 
     public static void load(String filename) {
@@ -72,7 +73,7 @@ public final class SpinConfiguration {
             throw new SpinConfigurationException("Spin failed to parse file '" + filename + "'", e);
         }
 
-        timeout = resolveTimeout(model);
+        startupConfiguration = resolveStartupConfiguration(model);
         instances = resolveInstances(model);
     }
 
@@ -80,8 +81,8 @@ public final class SpinConfiguration {
         return instances != null ? instances : new ArrayList<Instance>();
     }
 
-    public static Timeout getTimeout() {
-        return timeout != null ? timeout : new Timeout(DEFAULT_POLLING_INTERVAL_MILLIS, DEFAULT_RETRY_COUNT);
+    public static StartupConfiguration getStartupConfiguration() {
+        return startupConfiguration != null ? startupConfiguration : new StartupConfiguration(DEFAULT_POLLING_INTERVAL_MILLIS, DEFAULT_RETRY_COUNT, DEFAULT_CONCURRENT);
     }
 
     private static List<Instance> resolveInstances(Map<String, Map<String, Object>> model) {
@@ -123,7 +124,7 @@ public final class SpinConfiguration {
         return instances;
     }
 
-    private static Timeout resolveTimeout(Map<String, Map<String, Object>> model) {
+    private static StartupConfiguration resolveStartupConfiguration(Map<String, Map<String, Object>> model) {
         for (Map.Entry<String, Map<String, Object>> entry : model.entrySet()) {
             String key = entry.getKey();
 
@@ -131,12 +132,13 @@ public final class SpinConfiguration {
                 Map<String, Object> map = entry.getValue();
                 Integer pollingInterval = map.containsKey("polling_interval") ? (Integer) map.get("polling_interval") : DEFAULT_POLLING_INTERVAL_MILLIS;
                 Integer retryCount = map.containsKey("retry_count") ? (Integer) map.get("retry_count") : DEFAULT_RETRY_COUNT;
-                return new Timeout(pollingInterval, retryCount);
+                Boolean concurrentStartup = map.containsKey("concurrent") ? (Boolean) map.get("concurrent") : DEFAULT_CONCURRENT;
+                return new StartupConfiguration(pollingInterval, retryCount, concurrentStartup);
             }
 
         }
 
-        return new Timeout(DEFAULT_POLLING_INTERVAL_MILLIS, DEFAULT_RETRY_COUNT);
+        return new StartupConfiguration(DEFAULT_POLLING_INTERVAL_MILLIS, DEFAULT_RETRY_COUNT, DEFAULT_CONCURRENT);
     }
 
 }
