@@ -25,6 +25,7 @@ public class Instance {
     private String start;
     private String stop;
     private String ping;
+    private String path;
 
     private Map<String, String> environment = new HashMap<>();
 
@@ -75,6 +76,14 @@ public class Instance {
 
     public void setEnvironment(Map<String, String> environment) {
         this.environment = environment;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public boolean running() {

@@ -2,6 +2,7 @@ Test Service 1:
   start: test-path-1/start.sh
   stop: test-path-1/stop.sh
   ping: http://localhost:8080/v1/ping
+  path: ":/usr/local/bin"
   environment:
     key1: value1
     key2: value2

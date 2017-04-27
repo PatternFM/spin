@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +55,7 @@ public final class InstanceManagementService {
         log.info("Starting " + instance.getName());
         log.info("Using start script: " + script);
 
-        execute(script, directory, instance.getEnvironment());
+        execute(script, directory, instance);
     }
 
     public static void stop(Instance instance) {
@@ -85,7 +86,7 @@ public final class InstanceManagementService {
         log.info("Stopping " + instance.getName());
         log.info("Using stop script: " + script);
 
-        execute(script, directory, instance.getEnvironment());
+        execute(script, directory, instance);
     }
 
     public static boolean isRunning(Instance instance) {
@@ -98,13 +99,13 @@ public final class InstanceManagementService {
         }
     }
 
-    private static void execute(String script, String directory, Map<String, String> environment) {
+    private static void execute(String script, String directory, Instance instance) {
         try {
             ProcessBuilder builder = new ProcessBuilder("/bin/sh", script);
             builder.directory(new File(directory));
             builder.redirectErrorStream(true);
 
-            configureEnvironment(builder, environment);
+            configureEnvironment(builder, instance);
 
             Process process = builder.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -132,7 +133,7 @@ public final class InstanceManagementService {
     }
 
     private static String appendTrailingSlashIfNotPresent(String path) {
-        return String.valueOf(path.charAt(path.length() - 1)).equals("/") ? path : path + "/";
+        return String.valueOf(path.charAt(path.length() - 1)).equals(File.separator) ? path : path + File.separator;
     }
 
     private static String resolveTargetDirectory(String relativePath) {
@@ -141,10 +142,14 @@ public final class InstanceManagementService {
         return appendTrailingSlashIfNotPresent(resolved.normalize().toAbsolutePath().toString());
     }
 
-    private static void configureEnvironment(ProcessBuilder builder, Map<String, String> environment) {
+    private static void configureEnvironment(ProcessBuilder builder, Instance instance) {
         Map<String, String> map = builder.environment();
-        map.put("PATH", map.get("PATH") + ":/usr/local/bin");
-        for (Map.Entry<String, String> entry : environment.entrySet()) {
+
+        if (StringUtils.isNotBlank(instance.getPath())) {
+            map.put("PATH", map.get("PATH") + instance.getPath());
+        }
+
+        for (Map.Entry<String, String> entry : instance.getEnvironment().entrySet()) {
             map.put(entry.getKey(), entry.getValue());
         }
     }
