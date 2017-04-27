@@ -113,6 +113,11 @@ public final class SpinConfiguration {
 
             Instance instance = new Instance(name, start, stop, ping);
 
+            String path = (String) map.get("path");
+            if (StringUtils.isNotBlank(path)) {
+                instance.setPath(path);
+            }
+
             Map<String, String> environment = (Map<String, String>) map.get("environment");
             if (environment != null && !environment.isEmpty()) {
                 instance.setEnvironment(environment);

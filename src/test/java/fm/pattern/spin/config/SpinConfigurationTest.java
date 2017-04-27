@@ -32,6 +32,7 @@ public class SpinConfigurationTest {
         assertThat(first.getPing()).isEqualTo("http://localhost:8080/v1/ping");
         assertThat(first.getStart()).isEqualTo("test-path-1/start.sh");
         assertThat(first.getStop()).isEqualTo("test-path-1/stop.sh");
+        assertThat(first.getPath()).isEqualTo(":/usr/local/bin");
 
         Map<String, String> environment = first.getEnvironment();
         assertThat(environment).hasSize(2);

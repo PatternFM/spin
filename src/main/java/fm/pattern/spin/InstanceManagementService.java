@@ -52,9 +52,7 @@ public final class InstanceManagementService {
             throw new SpinConfigurationException("Unable to find start script '" + script + "' - the directory is valid, but the filename '" + filename + "' could not be found.");
         }
 
-        log.info("Starting " + instance.getName());
-        log.info("Using start script: " + script);
-
+        log.info("Starting " + instance.getName() + " using script: " + script);
         execute(script, directory, instance);
     }
 
@@ -83,9 +81,7 @@ public final class InstanceManagementService {
             throw new SpinConfigurationException("Unable to find stop script '" + script + "' - the directory is valid, but the filename '" + filename + "' could not be found.");
         }
 
-        log.info("Stopping " + instance.getName());
-        log.info("Using stop script: " + script);
-
+        log.info("Stopping " + instance.getName() + " using script: " + script);
         execute(script, directory, instance);
     }
 

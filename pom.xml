@@ -108,23 +108,10 @@
       </repository>
 
       <snapshotRepository>
-         <id>pattern-snapshot-repo</id>
-         <name>Pattern Snapshot Repository</name>
-         <url>s3://repository.pattern.fm/snapshots</url>
+         <id>osshr-snapshot</id>
+         <url>https://oss.sonatype.org/content/repositories/snapshots</url>
       </snapshotRepository>
    </distributionManagement>
-
-   <repositories>
-      <repository>
-         <id>pattern-snapshot-repo</id>
-         <name>Pattern Snapshot Repository</name>
-         <url>http://repository.pattern.fm/snapshots</url>
-         <snapshots>
-            <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
-         </snapshots>
-      </repository>
-   </repositories>
 
    <pluginRepositories>
       <pluginRepository>
